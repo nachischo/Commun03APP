@@ -17,18 +17,34 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.imsangar.commun03app.RESTrequest.REST;
+import com.imsangar.commun03app.fragments.TabCalibration;
 
 import java.util.List;
 
 class counters{
     static int BeaconCounter = 1;
-    static int anteriorValorMedicion = -1;
+    static double anteriorValorMedicion = -1;
+    static double Voffset = 0.0;
+    static double Vcalibracion = 42.31;
+
+
+    static double calculaO3(int valorBrutoMedicion){
+        double valorBruto = valorBrutoMedicion*3.3/4096 - Voffset;
+        double res = valorBruto/Vcalibracion;
+        return res;
+    }
+
+    static double calculaTemperatura(int valorBrutoTemperatura){
+        double valorBruto = valorBrutoTemperatura*3.3/4096;
+        double res = valorBruto*29-18;
+        return res;
+    }
 
     static void anyadeUnoABeaconCounter(){
         BeaconCounter++;
     }
 
-    static void cambiaValorMedicion(int nuevoValorMedicion){
+    static void cambiaValorMedicion(double nuevoValorMedicion){
         anteriorValorMedicion = nuevoValorMedicion;
     }
 }
@@ -165,10 +181,22 @@ public class BTLE {
                     mostrarInformacionDispositivoBTLE( resultado );
 
                     //solamente si el valor de la medicion ha cambiado hago POST al servidor para introducir una nueva medicion
-                    if(Utilidades.bytesToInt(tib.getMinor()) != counters.anteriorValorMedicion){
-                        REST.altaNuevaMedicion(String.valueOf(counters.BeaconCounter), dispositivoBuscado, Utilidades.bytesToInt(tib.getMinor()));
+                    if(Utilidades.bytesToInt(tib.getMajor()) == 1){
+
+                        TabCalibration.cambiaValorMedicion(counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
+
+                        REST.altaNuevaMedicion( Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
                         counters.anyadeUnoABeaconCounter();
-                        counters.cambiaValorMedicion(Utilidades.bytesToInt(tib.getMinor()));
+                        counters.cambiaValorMedicion(counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
+                    }
+
+                    else if(Utilidades.bytesToInt(tib.getMajor()) == 2){
+
+                        TabCalibration.cambiaValorTemperatura(counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
+
+                        REST.altaNuevaMedicion( Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
+                        counters.anyadeUnoABeaconCounter();
+                        counters.cambiaValorMedicion(counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
                     }
                 }
             }

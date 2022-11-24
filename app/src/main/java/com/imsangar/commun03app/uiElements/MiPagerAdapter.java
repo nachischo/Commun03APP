@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.imsangar.commun03app.fragments.TabBBDD;
 import com.imsangar.commun03app.fragments.TabBTLE;
+import com.imsangar.commun03app.fragments.TabCalibration;
 import com.imsangar.commun03app.fragments.TabLogin;
 
 public class MiPagerAdapter extends FragmentStateAdapter {
@@ -16,7 +17,7 @@ public class MiPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -24,11 +25,13 @@ public class MiPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new TabBTLE();
+                return new TabCalibration();
             case 1:
-                return new TabBBDD();
+                return new TabBTLE();
             case 2:
                 return new TabLogin();
+            case 3:
+                return new TabBBDD();
         }
         return null;
     }

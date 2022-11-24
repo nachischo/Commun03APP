@@ -47,13 +47,13 @@ public class REST {
 
     //doy de alta una nueva medicion en la base de datos con metodo POST
     //idMedicion: Texto, idSensor: Texto, valorMedicion: N --> altaNuevaMedicion() -->
-    public static void altaNuevaMedicion(String idMedicion, String idSensor, int valorMedicion){
+    public static void altaNuevaMedicion(int idMedicion, String idSensor, double valorMedicion){
         PeticionarioREST elPeticionario = new PeticionarioREST();
 
 
-        elPeticionario.hacerPeticionREST("POST",  "http://172.20.10.2:3000/api/mediciones",
+        elPeticionario.hacerPeticionREST("POST",  "https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/",
 
-                "{ 'sensor': '"+idSensor+"', 'valor': "+valorMedicion+", 'lat': '38.9964288', 'lon': '-0.1661116'}",
+                "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': '38.9964288', 'lon': '-0.1661116'}",
                 new PeticionarioREST.RespuestaREST () {
                     @Override
                     public void callback(int codigo, String cuerpo) {

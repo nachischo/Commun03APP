@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/valorMedicion"
+        android:layout_width="143dp"
+        android:layout_height="67dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="0.0"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textValorMedicion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textValorMedicion"
+        app:layout_constraintTop_toTopOf="@+id/textValorMedicion" />
+
+    <TextView
+        android:id="@+id/textValorMedicion"
+        android:layout_width="187dp"
+        android:layout_height="33dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="Valor de la medición:"
+        app:layout_constraintBottom_toTopOf="@+id/textValorTemperatura"
+        app:layout_constraintEnd_toStartOf="@+id/valorMedicion"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/valorTemperatura"
+        android:layout_width="142dp"
+        android:layout_height="67dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="0.0"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textValorTemperatura"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textValorTemperatura"
+        app:layout_constraintTop_toTopOf="@+id/textValorTemperatura" />
+
+    <TextView
+        android:id="@+id/textValorTemperatura"
+        android:layout_width="187dp"
+        android:layout_height="33dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="Valor de la temperatura:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/valorTemperatura"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textValorMedicion" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
