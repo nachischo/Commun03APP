@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/valorMedicion"
+        android:layout_width="143dp"
+        android:layout_height="67dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="0.0"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textValorMedicion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textValorMedicion"
+        app:layout_constraintTop_toTopOf="@+id/textValorMedicion" />
+
+    <TextView
+        android:id="@+id/textValorMedicion"
+        android:layout_width="143dp"
+        android:layout_height="36dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="Valor de la medición (no calibrado):"
+        app:layout_constraintBottom_toTopOf="@+id/textValorMedicionCalibrado"
+        app:layout_constraintEnd_toStartOf="@+id/valorMedicion"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/valorTemperatura"
+        android:layout_width="142dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="36dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="0.0"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textValorTemperatura"
+        app:layout_constraintEnd_toEndOf="@+id/valorMedicionCalibrado"
+        app:layout_constraintStart_toEndOf="@+id/textValorTemperatura"
+        app:layout_constraintTop_toTopOf="@+id/textValorTemperatura"
+        app:layout_constraintVertical_bias="0.47" />
+
+    <TextView
+        android:id="@+id/valorMedicionCalibrado"
+        android:layout_width="142dp"
+        android:layout_height="67dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textValorMedicionCalibrado"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textValorMedicionCalibrado"
+        app:layout_constraintTop_toTopOf="@+id/textValorMedicionCalibrado" />
+
+    <TextView
+        android:id="@+id/valorOffset"
+        android:layout_width="142dp"
+        android:layout_height="67dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textOffset"
+        app:layout_constraintEnd_toEndOf="@+id/valorTemperatura"
+        app:layout_constraintStart_toEndOf="@+id/textOffset"
+        app:layout_constraintTop_toTopOf="@+id/textOffset" />
+
+    <TextView
+        android:id="@+id/textValorTemperatura"
+        android:layout_width="187dp"
+        android:layout_height="33dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="Valor de la temperatura:"
+        app:layout_constraintBottom_toTopOf="@+id/editTextValorReal"
+        app:layout_constraintStart_toStartOf="@+id/textValorMedicionCalibrado"
+        app:layout_constraintTop_toBottomOf="@+id/textValorMedicionCalibrado" />
+
+    <TextView
+        android:id="@+id/textValorMedicionCalibrado"
+        android:layout_width="187dp"
+        android:layout_height="33dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="Valor de la medición (calibrado):"
+        app:layout_constraintBottom_toTopOf="@+id/textValorTemperatura"
+        app:layout_constraintEnd_toStartOf="@+id/valorMedicionCalibrado"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textValorMedicion" />
+
+    <TextView
+        android:id="@+id/textOffset"
+        android:layout_width="187dp"
+        android:layout_height="33dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="Valor de offset:"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textValorTemperatura"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCalibrar" />
+
+    <EditText
+        android:id="@+id/editTextValorReal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="introducir medición real..."
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCalibrar"
+        app:layout_constraintEnd_toEndOf="@+id/valorTemperatura"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/textValorTemperatura"
+        app:layout_constraintTop_toBottomOf="@+id/textValorTemperatura" />
+
+    <Button
+        android:id="@+id/buttonCalibrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calibrar"
+        app:layout_constraintBottom_toTopOf="@+id/textOffset"
+        app:layout_constraintEnd_toEndOf="@+id/editTextValorReal"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/editTextValorReal"
+        app:layout_constraintTop_toBottomOf="@+id/editTextValorReal" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

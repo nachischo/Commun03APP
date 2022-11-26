@@ -16,7 +16,7 @@ public class TabManager {
         actividad.setContentView(R.layout.activity_main);
 
         // Nombres de las pestañas
-        String[] nombres = new String[]{"Servicio Beacons","BBDD", "Login"};
+        String[] nombres = new String[]{"Calibración", "Servicio Beacons", "Login", "BBDD"};
 
         //Pestañas
         ViewPager2 viewPager = actividad.findViewById(R.id.viewpager);
