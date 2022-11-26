@@ -34,7 +34,7 @@ public class TabLogin extends Fragment {
             View emailUsuario = ((MainActivity)getActivity()).findViewById(R.id.emailUsuario);
             View passwordUsuario = ((MainActivity)getActivity()).findViewById(R.id.passwordUsuario);
             Log.d("nuevoPostLogin", "{ 'email': '"+((TextView)emailUsuario).getText().toString()+"', 'password': '"+((TextView)passwordUsuario).getText().toString()+"' }");
-            REST.nuevaPeticion.post("http://172.20.10.2:3000/api/login", "{ 'email': '" + ((TextView) emailUsuario).getText().toString() + "', 'password': '" + ((TextView) passwordUsuario).getText().toString() + "' }", new PeticionarioREST.RespuestaREST() {
+            REST.nuevaPeticion.post("http://172.20.10.2:3000/api/usuarios/login", "{ 'email': '" + ((TextView) emailUsuario).getText().toString() + "', 'password': '" + ((TextView) passwordUsuario).getText().toString() + "' }", new PeticionarioREST.RespuestaREST() {
                 @Override
                 public void callback(int codigo, String cuerpo) {
                     if(codigo == 200){

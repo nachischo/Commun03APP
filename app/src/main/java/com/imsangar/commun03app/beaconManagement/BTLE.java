@@ -23,12 +23,20 @@ import java.util.List;
 
 class counters{
     static int BeaconCounter = 1;
+    static int AnteriorValorBruto = 0;
     static double anteriorValorMedicion = -1;
-    static double Voffset = 0.0;
+    static double anteriorValorMedicionOffset = -1;
+    public static double Voffset = -1;
     static double Vcalibracion = 42.31;
 
 
     static double calculaO3(int valorBrutoMedicion){
+        double valorBruto = valorBrutoMedicion*3.3/4096;
+        double res = valorBruto/Vcalibracion;
+        return res;
+    }
+
+    static double calcula03ConOffset(int valorBrutoMedicion){
         double valorBruto = valorBrutoMedicion*3.3/4096 - Voffset;
         double res = valorBruto/Vcalibracion;
         return res;
@@ -47,6 +55,10 @@ class counters{
     static void cambiaValorMedicion(double nuevoValorMedicion){
         anteriorValorMedicion = nuevoValorMedicion;
     }
+
+    static void cambiaValorMedicionConOffset(double nuevoValorMedicionOffset){
+        anteriorValorMedicionOffset = nuevoValorMedicionOffset;
+    }
 }
 
 public class BTLE {
@@ -63,6 +75,14 @@ public class BTLE {
 
     private static ScanCallback callbackDelEscaneo = null;
 
+
+    // --------------------------------------------------------------
+    // --------------------------------------------------------------
+    public static void esteEsElOffset(double offsetValue){
+        counters.Voffset = offsetValue;
+        counters.cambiaValorMedicionConOffset(counters.calcula03ConOffset(counters.AnteriorValorBruto));
+        TabCalibration.cambiaValorMedicionConOffset(counters.calcula03ConOffset(counters.AnteriorValorBruto));
+    }
 
     // --------------------------------------------------------------
     // --------------------------------------------------------------
@@ -184,10 +204,16 @@ public class BTLE {
                     if(Utilidades.bytesToInt(tib.getMajor()) == 1){
 
                         TabCalibration.cambiaValorMedicion(counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
+                        counters.AnteriorValorBruto = Utilidades.bytesToInt(tib.getMinor());
 
                         REST.altaNuevaMedicion( Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
                         counters.anyadeUnoABeaconCounter();
                         counters.cambiaValorMedicion(counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
+                        if(counters.Voffset != -1){
+                            counters.cambiaValorMedicionConOffset(counters.calcula03ConOffset(Utilidades.bytesToInt(tib.getMinor())));
+                            TabCalibration.cambiaValorMedicionConOffset(counters.calcula03ConOffset(Utilidades.bytesToInt(tib.getMinor())));
+                        }
+
                     }
 
                     else if(Utilidades.bytesToInt(tib.getMajor()) == 2){
