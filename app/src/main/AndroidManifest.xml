@@ -21,13 +21,21 @@
         android:usesCleartextTraffic="true"
         >
         <activity
-            android:name="com.imsangar.commun03app.MainActivity"
+            android:name="com.imsangar.commun03app.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.imsangar.commun03app.MainActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name="com.imsangar.commun03app.DevActivity"
+            android:exported="true">
         </activity>
         <service android:name="com.imsangar.commun03app.services.ServicioEscucharBeacons" />
     </application>
