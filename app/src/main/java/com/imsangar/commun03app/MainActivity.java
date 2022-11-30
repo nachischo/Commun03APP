@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.imsangar.commun03app.beaconManagement.BTLE;
+import com.imsangar.commun03app.uiElements.FragmentAdapter;
 import com.imsangar.commun03app.uiElements.TabManager;
 
 
@@ -15,9 +16,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TabManager.inicializarTabs(MainActivity.this);
+        FragmentAdapter.inicializarFragmentHome(MainActivity.this, savedInstanceState);
 
-        BTLE.inicializarBlueTooth(this, MainActivity.this);
     }
 
 
