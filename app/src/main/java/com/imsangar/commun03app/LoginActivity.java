@@ -3,6 +3,7 @@ package com.imsangar.commun03app;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.imsangar.commun03app.uiElements.FragmentAdapter;
 

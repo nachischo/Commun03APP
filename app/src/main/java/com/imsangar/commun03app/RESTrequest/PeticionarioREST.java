@@ -11,6 +11,8 @@ import java.net.URL;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.fragment.app.FragmentManager;
+
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
@@ -60,7 +62,7 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
             URL url = new URL(urlDestino);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("Content-Type", "text/plain");
+            connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestMethod(this.elMetodo);
             // connection.setRequestProperty("Accept", "*/*);
 
@@ -134,6 +136,8 @@ public class PeticionarioREST extends AsyncTask<Void, Void, Boolean> {
     public interface RespuestaREST {
         void callback(int codigo, String cuerpo);
     }
+
+
 
 } // class
 
