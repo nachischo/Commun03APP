@@ -73,6 +73,7 @@ public class HomeFragment extends Fragment {
         binding = ActivityMapaBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        /*
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,9 +104,12 @@ public class HomeFragment extends Fragment {
 
                 }
             }
-        };
+        };*/
 
-        binding.fabOptions.setOnClickListener(listener);
+        binding.fabOptions.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), DevActivity.class );
+            startActivity(intent);
+        });
 
         return root;
     }
