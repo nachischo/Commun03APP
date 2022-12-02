@@ -30,7 +30,7 @@ public class ForgottenPasswordFragment extends Fragment {
         }
 
         binding.forgottenPsswrdButton.setOnClickListener(view -> {
-            FragmentAdapter.inicializarFragmentLogin(((com.imsangar.commun03app.LoginActivity)getActivity()), savedInstanceState);
+            FragmentAdapter.volverAFragmentLogin(((com.imsangar.commun03app.LoginActivity)getActivity()), savedInstanceState, new Bundle());
         });
 
         return root;
