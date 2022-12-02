@@ -3,6 +3,7 @@ package com.imsangar.commun03app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.imsangar.commun03app.beaconManagement.BTLE;
 import com.imsangar.commun03app.uiElements.FragmentAdapter;
@@ -18,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentAdapter.inicializarFragmentHome(MainActivity.this, savedInstanceState);
 
-        //FragmentAdapter.inicializarFragmentHomePrueba(MainActivity.this, savedInstanceState);
     }
 
 

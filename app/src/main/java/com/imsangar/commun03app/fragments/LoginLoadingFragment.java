@@ -1,8 +1,11 @@
 package com.imsangar.commun03app.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -170,6 +173,29 @@ public class LoginLoadingFragment extends Fragment {
                 public void callback(int codigo, String cuerpo) {
                     if(codigo == 200){
                         Log.d( "nuevoPostLogin", "codigo = " + codigo+" cuerpo = "+cuerpo );
+
+                        JSONObject cuerpoJSON = null;
+                        try {
+                            cuerpoJSON = new JSONObject(cuerpo);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        SharedPreferences sharedPreferences = ((LoginActivity)getActivity()).getSharedPreferences("shared_prefs",MODE_PRIVATE);
+                        SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
+
+                        editarPreferencias.putString("email", requireArguments().getString("email"));
+                        editarPreferencias.putString("password", requireArguments().getString("password"));
+                        try {
+                        editarPreferencias.putString("nickname", cuerpoJSON.getString("nickname"));
+                        editarPreferencias.putString("profile_photo_url", cuerpoJSON.getString("profile_photo_url"));
+                        editarPreferencias.putString("rol", cuerpoJSON.getString("rol"));
+                        editarPreferencias.putString("token", cuerpoJSON.getString("token"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        editarPreferencias.commit();
 
                         Intent intent = new Intent(getContext(), MainActivity.class );
                         startActivity(intent);

@@ -1,6 +1,8 @@
 package com.imsangar.commun03app;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -14,7 +16,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FragmentAdapter.inicializarFragmentLogin(LoginActivity.this, savedInstanceState);
+        if(getSharedPreferences("shared_prefs",MODE_PRIVATE).contains("email")&&getSharedPreferences("shared_prefs",MODE_PRIVATE).contains("password")){
+            Bundle datosUser = new Bundle();
+            datosUser.putString("email", getSharedPreferences("shared_prefs",MODE_PRIVATE).getString("email",""));
+            datosUser.putString("password", getSharedPreferences("shared_prefs",MODE_PRIVATE).getString("password",""));
+            FragmentAdapter.inicializarFragmentLoginLoading(LoginActivity.this, savedInstanceState, datosUser, 10200);
+        }
+        else{
+            FragmentAdapter.inicializarFragmentLogin(LoginActivity.this, savedInstanceState);
+        }
 
     }
 
