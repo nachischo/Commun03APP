@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentAdapter.inicializarFragmentHome(MainActivity.this, savedInstanceState);
 
+        //FragmentAdapter.inicializarFragmentHomePrueba(MainActivity.this, savedInstanceState);
     }
 
 

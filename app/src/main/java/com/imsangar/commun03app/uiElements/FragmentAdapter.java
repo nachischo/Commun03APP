@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 
 import com.imsangar.commun03app.R;
+import com.imsangar.commun03app.fragments.ForgottenPasswordFragment;
+import com.imsangar.commun03app.fragments.FragmentPruebaHome;
 import com.imsangar.commun03app.fragments.HomeFragment;
 import com.imsangar.commun03app.fragments.LoginActivityFragment;
 import com.imsangar.commun03app.fragments.LoginLoadingFragment;
@@ -51,6 +53,28 @@ public class FragmentAdapter {
             actividad.getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .add(R.id.fragmentContainerView, HomeFragment.class, null)
+                    .commit();
+        }
+    }
+
+    public static void inicializarFragmentForgottenPassword(FragmentActivity actividad, Bundle savedInstanceState, Bundle datosUser) {
+        actividad.setContentView(R.layout.activity_principal);
+
+        if (savedInstanceState == null) {
+            actividad.getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragmentContainerView, ForgottenPasswordFragment.class, datosUser)
+                    .commit();
+        }
+    }
+
+    public static void inicializarFragmentHomePrueba(FragmentActivity actividad, Bundle savedInstanceState) {
+        actividad.setContentView(R.layout.activity_principal);
+
+        if (savedInstanceState == null) {
+            actividad.getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragmentContainerView, FragmentPruebaHome.class, null)
                     .commit();
         }
     }

@@ -160,12 +160,12 @@ public class LoginLoadingFragment extends Fragment {
 
 
         //bypass login for dev purposes
-        /*Intent intent = new Intent(getContext(), MainActivity.class );
-        startActivity(intent);*/
+        //Intent intent = new Intent(getContext(), MainActivity.class );
+        //startActivity(intent);
 
         Log.d("nuevoPostLogin", "{ 'email': '"+requireArguments().getString("email")+"', 'password': '"+requireArguments().getString("password")+"' }");
         try {
-            REST.nuevaPeticion.post("http://172.20.10.4:3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", requireArguments().getString("email")).put("password", requireArguments().getString("password"))), new PeticionarioREST.RespuestaREST() {
+            REST.nuevaPeticion.post("http://172.20.10.9:3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", requireArguments().getString("email")).put("password", requireArguments().getString("password"))), new PeticionarioREST.RespuestaREST() {
                 @Override
                 public void callback(int codigo, String cuerpo) {
                     if(codigo == 200){

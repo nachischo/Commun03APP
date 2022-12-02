@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@null"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="130dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="114dp"
+            android:background="@drawable/tarjeta_info_superior"
+            android:clipToOutline="true"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/CalidadDelAireEstim"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="6dp"
+                    android:gravity="center"
+                    android:text="BAJA CONCENTRACIÓN DE O3 EN LA ZONA"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="124dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/CalidadDelAireEstim"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/clean_air_icon" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/tarjeta_info_inferior"
+            android:clipToOutline="true"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/GraficaContainer"
+                    android:layout_width="310dp"
+                    android:layout_height="159dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@+id/NivelConcentracionText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/GraficaMockup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/grafica_mockup" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/NivelConcentracionText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nivel de concentración actual:"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toTopOf="@+id/MediaEnLaZonaText"
+                    app:layout_constraintEnd_toStartOf="@+id/NivelConcentracion"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/GraficaContainer" />
+
+                <TextView
+                    android:id="@+id/MediaEnLaZonaText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Media de la semana en la zona:"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/MediaEnLaZona"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/NivelConcentracionText" />
+
+                <TextView
+                    android:id="@+id/NivelConcentracion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0,26 µg/m3"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toBottomOf="@+id/NivelConcentracionText"
+                    app:layout_constraintEnd_toEndOf="@+id/GraficaContainer"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/NivelConcentracionText"
+                    app:layout_constraintTop_toTopOf="@+id/NivelConcentracionText" />
+
+                <TextView
+                    android:id="@+id/MediaEnLaZona"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0,30 µg/m3"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toBottomOf="@+id/MediaEnLaZonaText"
+                    app:layout_constraintEnd_toEndOf="@+id/GraficaContainer"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/MediaEnLaZonaText"
+                    app:layout_constraintTop_toTopOf="@+id/MediaEnLaZonaText" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

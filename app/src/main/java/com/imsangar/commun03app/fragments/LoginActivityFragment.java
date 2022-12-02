@@ -36,6 +36,13 @@ public class LoginActivityFragment extends Fragment {
             }
         }
 
+        binding.forgottenPasswordButton.setOnClickListener(view->{
+            Bundle datosUser = new Bundle();
+            View emailUsuario = ((com.imsangar.commun03app.LoginActivity)getActivity()).findViewById(R.id.usernameInput);
+            datosUser.putString("email", ((TextView)emailUsuario).getText().toString());
+            FragmentAdapter.inicializarFragmentForgottenPassword(((com.imsangar.commun03app.LoginActivity)getActivity()), savedInstanceState, datosUser);
+        });
+
 
         binding.loginButtonBien.setOnClickListener(view -> {
             Bundle datosUser = new Bundle();
