@@ -72,13 +72,14 @@ public class TabLogin extends Fragment {
         });
 
         binding.cerrarSesionDev.setOnClickListener(view -> {
-            SharedPreferences sharedPreferences = ((DevActivity)getActivity()).getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
             editarPreferencias.clear();
             editarPreferencias.commit();
 
             Intent intent = new Intent(getContext(), LoginActivity.class );
             startActivity(intent);
+            ((DevActivity)getActivity()).finish();
         });
 
         return root;

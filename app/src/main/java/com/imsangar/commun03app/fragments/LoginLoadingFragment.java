@@ -30,8 +30,8 @@ import org.json.JSONObject;
 public class LoginLoadingFragment extends Fragment {
 
     private LoadingScreenBinding binding;
-    private int animationDuration = 500; // 1 Second
-    private int intervalBetweenAnimations = 500; // 1 Second
+    private int animationDuration = 500; // 0.5 Seconds
+    private int intervalBetweenAnimations = 500; // 0.5 Seconds
     private Handler handler = new Handler();
     private Runnable runnable = null;
     private Runnable deNadaa0 = null;
@@ -168,7 +168,7 @@ public class LoginLoadingFragment extends Fragment {
 
         Log.d("nuevoPostLogin", "{ 'email': '"+requireArguments().getString("email")+"', 'password': '"+requireArguments().getString("password")+"' }");
         try {
-            REST.nuevaPeticion.post("http://172.20.10.9:3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", requireArguments().getString("email")).put("password", requireArguments().getString("password"))), new PeticionarioREST.RespuestaREST() {
+            REST.nuevaPeticion.post("http://172.20.10.2:3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", requireArguments().getString("email")).put("password", requireArguments().getString("password"))), new PeticionarioREST.RespuestaREST() {
                 @Override
                 public void callback(int codigo, String cuerpo) {
                     if(codigo == 200){
@@ -181,24 +181,51 @@ public class LoginLoadingFragment extends Fragment {
                             e.printStackTrace();
                         }
 
-                        SharedPreferences sharedPreferences = ((LoginActivity)getActivity()).getSharedPreferences("shared_prefs",MODE_PRIVATE);
+                        SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
                         SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
 
                         editarPreferencias.putString("email", requireArguments().getString("email"));
                         editarPreferencias.putString("password", requireArguments().getString("password"));
                         try {
-                        editarPreferencias.putString("nickname", cuerpoJSON.getString("nickname"));
-                        editarPreferencias.putString("profile_photo_url", cuerpoJSON.getString("profile_photo_url"));
-                        editarPreferencias.putString("rol", cuerpoJSON.getString("rol"));
-                        editarPreferencias.putString("token", cuerpoJSON.getString("token"));
+                            editarPreferencias.putString("nickname", cuerpoJSON.getString("nickname"));
+                            editarPreferencias.putString("profile_photo_url", cuerpoJSON.getString("profile_photo_url"));
+                            editarPreferencias.putString("rol", cuerpoJSON.getString("rol"));
+                            editarPreferencias.putString("token", cuerpoJSON.getString("token"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
                         editarPreferencias.commit();
 
-                        Intent intent = new Intent(getContext(), MainActivity.class );
-                        startActivity(intent);
+                        REST.nuevaPeticion.get("http://172.20.10.2:3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
+                            @Override
+                            public void callback(int codigo, String cuerpo) {
+                                JSONObject cuerpoJSON = null;
+                                try {
+                                    cuerpoJSON = new JSONObject(cuerpo);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
+                                SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
+                                try {
+                                    editarPreferencias.putString("uuid", cuerpoJSON.getString("uuid"));
+                                    editarPreferencias.putFloat("uuid", (float)cuerpoJSON.getDouble("valorCariblracion"));
+                                    editarPreferencias.putInt("ayuntamiento_id", cuerpoJSON.getInt("ayuntamiento_id"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                editarPreferencias.commit();
+
+                                Intent intent = new Intent(getContext(), MainActivity.class );
+                                startActivity(intent);
+                                ((LoginActivity)getActivity()).finish();
+                            }
+
+                        });
+
                     }
                     else{
                         Log.d( "nuevoPostLogin fallido", "codigo de error = " + codigo );

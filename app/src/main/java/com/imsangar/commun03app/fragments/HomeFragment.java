@@ -3,8 +3,11 @@ package com.imsangar.commun03app.fragments;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -35,13 +38,12 @@ import org.osmdroid.views.MapView;
 public class HomeFragment extends Fragment {
 
     private ActivityMapaBinding binding;
-    private MapView myOpenMapView;
-    private MapController myMapController;
     private CountDownTimer countDownTimer;
     private Boolean isConfigExpanded = false;
     private Boolean isSensorExpanded = false;
     private ViewGroup.LayoutParams originalConfigParams = null;
     private ViewGroup.LayoutParams originalSensorParams = null;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,15 +116,15 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        GeoPoint madrid = new GeoPoint(38.99660440484192, -0.16639447183603295);
 
-        myOpenMapView = (MapView) ((MainActivity)getActivity()).findViewById(R.id.openmapview);
-        myOpenMapView.setMultiTouchControls(true);
-        myMapController = (MapController) myOpenMapView.getController();
-        myMapController.setCenter(madrid);
-        myMapController.setZoom(19.0);
+        MainActivity.myOpenMapView = (MapView) ((MainActivity)getActivity()).findViewById(R.id.openmapview);
+        MainActivity.myOpenMapView.setMultiTouchControls(true);
+        MainActivity.myMapController = (MapController) MainActivity.myOpenMapView.getController();
+        MainActivity.myMapController.setCenter(MainActivity.userLocation);
+        MainActivity.myMapController.setZoom(7.0);
     }
 
 

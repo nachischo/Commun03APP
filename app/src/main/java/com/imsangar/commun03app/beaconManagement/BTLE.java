@@ -21,42 +21,42 @@ import com.imsangar.commun03app.fragments.TabCalibration;
 
 import java.util.List;
 
-class counters{
+class counters {
     static int BeaconCounter = 1;
     static int AnteriorValorBruto = 0;
-    static double anteriorValorMedicion = -1;
-    static double anteriorValorMedicionOffset = -1;
-    public static double Voffset = -1;
+    static double anteriorValorMedicion = - 1;
+    static double anteriorValorMedicionOffset = - 1;
+    public static double Voffset = - 1;
     static double Vcalibracion = 42.31;
 
 
-    static double calculaO3(int valorBrutoMedicion){
-        double valorBruto = valorBrutoMedicion*3.3/4096;
-        double res = valorBruto/Vcalibracion;
+    static double calculaO3(int valorBrutoMedicion) {
+        double valorBruto = valorBrutoMedicion * 3.3 / 4096;
+        double res = valorBruto / Vcalibracion;
         return res;
     }
 
-    static double calcula03ConOffset(int valorBrutoMedicion){
-        double valorBruto = valorBrutoMedicion*3.3/4096 - Voffset;
-        double res = valorBruto/Vcalibracion;
+    static double calcula03ConOffset(int valorBrutoMedicion) {
+        double valorBruto = valorBrutoMedicion * 3.3 / 4096 - Voffset;
+        double res = valorBruto / Vcalibracion;
         return res;
     }
 
-    static double calculaTemperatura(int valorBrutoTemperatura){
-        double valorBruto = valorBrutoTemperatura*3.3/4096;
-        double res = valorBruto*29-18;
+    static double calculaTemperatura(int valorBrutoTemperatura) {
+        double valorBruto = valorBrutoTemperatura * 3.3 / 4096;
+        double res = valorBruto * 29 - 18;
         return res;
     }
 
-    static void anyadeUnoABeaconCounter(){
+    static void anyadeUnoABeaconCounter() {
         BeaconCounter++;
     }
 
-    static void cambiaValorMedicion(double nuevoValorMedicion){
+    static void cambiaValorMedicion(double nuevoValorMedicion) {
         anteriorValorMedicion = nuevoValorMedicion;
     }
 
-    static void cambiaValorMedicionConOffset(double nuevoValorMedicionOffset){
+    static void cambiaValorMedicionConOffset(double nuevoValorMedicionOffset) {
         anteriorValorMedicionOffset = nuevoValorMedicionOffset;
     }
 }
@@ -78,7 +78,7 @@ public class BTLE {
 
     // --------------------------------------------------------------
     // --------------------------------------------------------------
-    public static void esteEsElOffset(double offsetValue){
+    public static void esteEsElOffset(double offsetValue) {
         counters.Voffset = offsetValue;
         counters.cambiaValorMedicionConOffset(counters.calcula03ConOffset(counters.AnteriorValorBruto));
         TabCalibration.cambiaValorMedicionConOffset(counters.calcula03ConOffset(counters.AnteriorValorBruto));
@@ -96,11 +96,11 @@ public class BTLE {
 
             //cuando encuentre un beacon ejecuto este código
             @Override
-            public void onScanResult( int callbackType, ScanResult resultado ) {
+            public void onScanResult(int callbackType, ScanResult resultado) {
                 super.onScanResult(callbackType, resultado);
                 Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): onScanResult() ");
 
-                mostrarInformacionDispositivoBTLE( resultado );
+                mostrarInformacionDispositivoBTLE(resultado);
             }
 
             @Override
@@ -119,6 +119,7 @@ public class BTLE {
         };
 
         Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): empezamos a escanear ");
+
 
         elEscanner.startScan(callbackDelEscaneo);
 

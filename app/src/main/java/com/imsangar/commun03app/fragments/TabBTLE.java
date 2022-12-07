@@ -1,5 +1,8 @@
 package com.imsangar.commun03app.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +10,8 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+import com.imsangar.commun03app.LoginActivity;
+import com.imsangar.commun03app.MainActivity;
 import com.imsangar.commun03app.beaconManagement.BTLE;
 import com.imsangar.commun03app.databinding.ArrancarServicioBeaconsBinding;
 
@@ -33,7 +38,10 @@ public class TabBTLE extends Fragment {
         });
 
         binding.buscarMicro.setOnClickListener(view -> {
-           BTLE.buscarEsteDispositivoBTLE("43:4f:4d:4d:55:4e:2d:4f:33:2d:47:54:49:2d:33:41:");
+
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
+
+            BTLE.buscarEsteDispositivoBTLE(sharedPreferences.getString("uuid","no hay uuid para buscar"));
         });
         return root;
     }
