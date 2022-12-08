@@ -47,6 +47,22 @@
         app:srcCompat="@drawable/menu_option" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_user_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="30dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="32dp"
+        app:srcCompat="@drawable/locationicon" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/info_floating_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

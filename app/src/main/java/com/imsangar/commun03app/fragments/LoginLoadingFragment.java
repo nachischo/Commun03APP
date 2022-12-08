@@ -200,28 +200,38 @@ public class LoginLoadingFragment extends Fragment {
                         REST.nuevaPeticion.get("http://172.20.10.2:3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
                             @Override
                             public void callback(int codigo, String cuerpo) {
-                                JSONObject cuerpoJSON = null;
-                                try {
-                                    cuerpoJSON = new JSONObject(cuerpo);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                if(codigo == 200) {
+                                    JSONObject cuerpoJSON = null;
+                                    try {
+                                        cuerpoJSON = new JSONObject(cuerpo);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
+                                    SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
+                                    try {
+                                        editarPreferencias.putString("uuid", cuerpoJSON.getString("uuid"));
+                                        editarPreferencias.putFloat("uuid", (float)cuerpoJSON.getDouble("valorCariblracion"));
+                                        editarPreferencias.putInt("ayuntamiento_id", cuerpoJSON.getInt("ayuntamiento_id"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    editarPreferencias.commit();
+
+                                    Intent intent = new Intent(getContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    ((LoginActivity) getActivity()).finish();
                                 }
+                                else{
+                                    Log.d( "nuevoPostLogin fallido", "codigo de error = " + codigo );
+                                    Bundle bundleReqRes = new Bundle();
+                                    bundleReqRes.putInt("responseCode" , codigo);
+                                    bundleReqRes.putString("responseBody" , cuerpo);
+                                    FragmentAdapter.volverAFragmentLogin(((LoginActivity)getActivity()), savedInstanceState, bundleReqRes);
 
-                                SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
-                                SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
-                                try {
-                                    editarPreferencias.putString("uuid", cuerpoJSON.getString("uuid"));
-                                    editarPreferencias.putFloat("uuid", (float)cuerpoJSON.getDouble("valorCariblracion"));
-                                    editarPreferencias.putInt("ayuntamiento_id", cuerpoJSON.getInt("ayuntamiento_id"));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-
-                                editarPreferencias.commit();
-
-                                Intent intent = new Intent(getContext(), MainActivity.class );
-                                startActivity(intent);
-                                ((LoginActivity)getActivity()).finish();
                             }
 
                         });

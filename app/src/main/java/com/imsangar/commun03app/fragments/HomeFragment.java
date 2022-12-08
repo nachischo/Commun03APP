@@ -1,10 +1,14 @@
 package com.imsangar.commun03app.fragments;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +31,7 @@ import com.imsangar.commun03app.BuildConfig;
 import com.imsangar.commun03app.DevActivity;
 import com.imsangar.commun03app.MainActivity;
 import com.imsangar.commun03app.R;
+import com.imsangar.commun03app.beaconManagement.BTLE;
 import com.imsangar.commun03app.databinding.ActivityMapaBinding;
 import com.imsangar.commun03app.databinding.HomeBinding;
 
@@ -43,6 +49,11 @@ public class HomeFragment extends Fragment {
     private Boolean isSensorExpanded = false;
     private ViewGroup.LayoutParams originalConfigParams = null;
     private ViewGroup.LayoutParams originalSensorParams = null;
+    private Handler handler = new Handler();
+    private Runnable runnableMapCentered = null;
+    private Runnable vuelveAempezar = null;
+    private Boolean yaAnimeFabUserLocVisible = false;
+    private Boolean yaAnimeFabUserLocInvisible = false;
 
 
     @Override
@@ -63,6 +74,82 @@ public class HomeFragment extends Fragment {
             }
         }
 
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
+
+        BTLE.buscarEsteDispositivoBTLE(sharedPreferences.getString("uuid","no hay uuid para buscar"));
+
+        vuelveAempezar = new Runnable() {
+            @Override
+            public void run() {
+                handler = new Handler();
+                handler.postAtTime(runnableMapCentered, System.currentTimeMillis()+100);
+                handler.postDelayed(runnableMapCentered, 100);
+
+            }
+        };
+
+
+        runnableMapCentered = new Runnable(){
+
+            public void run() {
+                GeoPoint mapCenter = (GeoPoint) MainActivity.myOpenMapView.getMapCenter();
+                GeoPoint userLocation = MainActivity.userLocation;
+
+                if(mapCenter.getLatitude()<userLocation.getLatitude()-0.002||mapCenter.getLatitude()>userLocation.getLatitude()+0.002||mapCenter.getLongitude()<userLocation.getLongitude()-0.002||mapCenter.getLongitude()>userLocation.getLongitude()+0.002){
+                    if(!yaAnimeFabUserLocVisible){
+                        yaAnimeFabUserLocVisible = true;
+                        yaAnimeFabUserLocInvisible = false;
+                        binding.fabUserLocation.setTag(true);
+                        binding.fabUserLocation.bringToFront();
+                        binding.fabUserLocation.setVisibility(View.VISIBLE);
+                        binding.fabUserLocation.animate()
+                                .alpha(1f)
+                                .setDuration(500)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        binding.fabUserLocation.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                        handler = new Handler();
+                        handler.postAtTime(vuelveAempezar, System.currentTimeMillis()+2000);
+                        handler.postDelayed(vuelveAempezar, 2000);
+                    }
+                    else{
+                        handler = new Handler();
+                        handler.postAtTime(vuelveAempezar, System.currentTimeMillis()+2000);
+                        handler.postDelayed(vuelveAempezar, 2000);
+                    }
+                }
+                if(mapCenter.getLatitude()>userLocation.getLatitude()-0.002&&mapCenter.getLatitude()<userLocation.getLatitude()+0.002&&mapCenter.getLongitude()>userLocation.getLongitude()-0.002&&mapCenter.getLongitude()<userLocation.getLongitude()+0.002) {
+                    if (!yaAnimeFabUserLocInvisible) {
+                        yaAnimeFabUserLocInvisible = true;
+                        yaAnimeFabUserLocVisible = false;
+                        binding.fabUserLocation.setTag(false);
+                        binding.fabUserLocation.animate()
+                                .alpha(0f)
+                                .setDuration(500)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        binding.fabUserLocation.setVisibility(View.GONE);
+                                    }
+                                });
+                        handler = new Handler();
+                        handler.postAtTime(vuelveAempezar, System.currentTimeMillis() + 2000);
+                        handler.postDelayed(vuelveAempezar, 2000);
+                    }
+                    else{
+                        handler = new Handler();
+                        handler.postAtTime(vuelveAempezar, System.currentTimeMillis()+2000);
+                        handler.postDelayed(vuelveAempezar, 2000);
+                    }
+                }
+            }
+        };
+
+        handler.postAtTime(runnableMapCentered, System.currentTimeMillis()+4000);
+        handler.postDelayed(runnableMapCentered, 4000);
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
@@ -75,7 +162,7 @@ public class HomeFragment extends Fragment {
         binding = ActivityMapaBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        /*
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,12 +193,19 @@ public class HomeFragment extends Fragment {
 
                 }
             }
-        };*/
+        };
 
-        binding.fabOptions.setOnClickListener(view -> {
+        binding.fabOptions.setOnClickListener(listener
+                /*view -> {
             Intent intent = new Intent(getContext(), DevActivity.class );
             startActivity(intent);
+        }*/
+        );
+
+        binding.fabUserLocation.setOnClickListener(view -> {
+            MainActivity.myMapController.animateTo(MainActivity.userLocation, 19.0, 1500L);
         });
+
 
         return root;
     }
@@ -122,9 +216,12 @@ public class HomeFragment extends Fragment {
 
         MainActivity.myOpenMapView = (MapView) ((MainActivity)getActivity()).findViewById(R.id.openmapview);
         MainActivity.myOpenMapView.setMultiTouchControls(true);
+        MainActivity.myOpenMapView.getMapCenter().getLatitude();
+        MainActivity.myOpenMapView.getMapCenter().getLongitude();
         MainActivity.myMapController = (MapController) MainActivity.myOpenMapView.getController();
         MainActivity.myMapController.setCenter(MainActivity.userLocation);
         MainActivity.myMapController.setZoom(7.0);
+
     }
 
 
