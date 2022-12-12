@@ -1,5 +1,8 @@
 package com.imsangar.commun03app.fragments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -9,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.imsangar.commun03app.DevActivity;
+import com.imsangar.commun03app.LoginActivity;
 import com.imsangar.commun03app.MainActivity;
 import com.imsangar.commun03app.R;
 import com.imsangar.commun03app.RESTrequest.PeticionarioREST;
@@ -37,7 +42,6 @@ public class OptionsFragment extends Fragment {
 
         binding.CloseOptionsButton.setAlpha(0f);
         binding.CloseOptionsButton.setVisibility(View.VISIBLE);
-        binding.CloseOptionsButton.bringToFront();
         binding.CloseOptionsButton.animate()
                 .alpha(1f)
                 .setDuration(500)
@@ -46,6 +50,17 @@ public class OptionsFragment extends Fragment {
         binding.CloseOptionsButton.setOnClickListener(view -> {
             FragmentAdapter.inicializarFragmentHome(((MainActivity)getActivity()), savedInstanceState);
             MainActivity.mapInitialized = false;
+        });
+
+        binding.CerrarSesionButton.setOnClickListener(view -> {
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
+            editarPreferencias.clear();
+            editarPreferencias.commit();
+
+            Intent intent = new Intent(getContext(), LoginActivity.class );
+            startActivity(intent);
+            ((MainActivity)getActivity()).finish();
         });
 
         return root;
