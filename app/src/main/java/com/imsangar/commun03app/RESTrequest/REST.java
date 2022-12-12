@@ -2,6 +2,8 @@ package com.imsangar.commun03app.RESTrequest;
 
 import android.util.Log;
 
+import com.imsangar.commun03app.MainActivity;
+
 
 public class REST {
     //-------------------------------------------------------------
@@ -53,7 +55,7 @@ public class REST {
 
         elPeticionario.hacerPeticionREST("POST",  "https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/",
 
-                "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': '38.9964288', 'lon': '-0.1661116'}",
+                "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': "+ MainActivity.userLocation.getLatitude() +", 'lon': "+MainActivity.userLocation.getLongitude()+"}",
                 new PeticionarioREST.RespuestaREST () {
                     @Override
                     public void callback(int codigo, String cuerpo) {
@@ -88,6 +90,16 @@ public class REST {
             PeticionarioREST elPeticionario = new PeticionarioREST();
 
             elPeticionario.hacerPeticionREST("POST",  urlDestino,
+                    cuerpo, callback
+            );
+        }
+
+        //urlDestino:String, cuerpo:String --> nuevaPeticion.post() -->
+        public static void put(String urlDestino, String cuerpo, PeticionarioREST.RespuestaREST callback){
+
+            PeticionarioREST elPeticionario = new PeticionarioREST();
+
+            elPeticionario.hacerPeticionREST("PUT",  urlDestino,
                     cuerpo, callback
             );
         }

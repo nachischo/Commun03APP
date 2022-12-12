@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.imsangar.commun03app.DevActivity;
 import com.imsangar.commun03app.MainActivity;
 import com.imsangar.commun03app.R;
 import com.imsangar.commun03app.beaconManagement.BTLE;
@@ -64,8 +65,8 @@ public class TabCalibration extends Fragment {
         valorMedicionOffset = binding.valorMedicionCalibrado;
 
         binding.buttonCalibrar.setOnClickListener(view -> {
-            View valorReal = ((MainActivity)getActivity()).findViewById(R.id.editTextValorReal);
-            View valorOffset = ((MainActivity)getActivity()).findViewById(R.id.valorOffset);
+            View valorReal = ((DevActivity)getActivity()).findViewById(R.id.editTextValorReal);
+            View valorOffset = ((DevActivity)getActivity()).findViewById(R.id.valorOffset);
 
             ((TextView)valorOffset).setText(String.valueOf(calculaOffset(Double.parseDouble(((TextView)valorReal).getText().toString()))));
             BTLE.esteEsElOffset(calculaOffset(Double.parseDouble(((TextView)valorReal).getText().toString())));

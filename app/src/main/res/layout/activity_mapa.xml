@@ -16,33 +16,62 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatin_button_sensor"
+        android:id="@+id/fab_sensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="45dp"
-        android:backgroundTint="#f1f1f1"
+        android:backgroundTint="@color/white"
         android:clickable="true"
         android:focusable="true"
-        android:tint="#f1f1f1"
-        app:backgroundTint="#f1f1f1"
+        android:tint="@color/white"
+        app:backgroundTint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="40dp"
         app:srcCompat="@drawable/sensoricon" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatin_button_options"
+        android:id="@+id/fab_options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:layout_marginEnd="30dp"
-        android:backgroundTint="#f1f1f1"
+        android:backgroundTint="@color/white"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="#f1f1f1"
+        app:backgroundTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="36dp"
         app:srcCompat="@drawable/menu_option" />
+
+    <View
+        android:id="@+id/circleOptions"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:background="@drawable/circle"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_options"
+        app:layout_constraintEnd_toEndOf="@+id/fab_options"
+        app:layout_constraintStart_toStartOf="@+id/fab_options"
+        app:layout_constraintTop_toTopOf="@+id/fab_options" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_user_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="30dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="32dp"
+        app:srcCompat="@drawable/locationicon" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/info_floating_button"
@@ -52,9 +81,9 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/floatin_button_sensor"
-        app:layout_constraintStart_toEndOf="@+id/floatin_button_sensor"
-        app:layout_constraintTop_toTopOf="@+id/floatin_button_sensor"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_sensor"
+        app:layout_constraintStart_toEndOf="@+id/fab_sensor"
+        app:layout_constraintTop_toTopOf="@+id/fab_sensor"
         app:srcCompat="@android:drawable/ic_menu_info_details" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -65,9 +94,9 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/floatin_button_sensor"
-        app:layout_constraintStart_toStartOf="@+id/floatin_button_sensor"
-        app:layout_constraintTop_toBottomOf="@+id/floatin_button_sensor"
+        app:layout_constraintEnd_toEndOf="@+id/fab_sensor"
+        app:layout_constraintStart_toStartOf="@+id/fab_sensor"
+        app:layout_constraintTop_toBottomOf="@+id/fab_sensor"
         app:srcCompat="?attr/actionModeCopyDrawable" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -83,79 +112,156 @@
         app:layout_constraintTop_toBottomOf="@+id/info_floating_button"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollDatos"
-        app:layout_constraintHeight_max="330dp"
-        android:layout_width="370dp"
-        android:layout_height="wrap_content"
-        android:maxHeight="20dp"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/openmapview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/datosDelscroll"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:context=".MainActivity">
+        <!-- Adding bottom sheet after main content -->
+        <LinearLayout
+            android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="230dp"
-            android:background="@drawable/layout_bg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context=".model.DatosFragment">
+            android:layout_height="400dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@null"
+            android:orientation="vertical"
+            android:padding="20dp"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="130dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/linearLayout3"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="114dp"
+                android:background="@drawable/tarjeta_info_superior"
+                android:clipToOutline="true"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/imageView"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="20dp"
-                    android:layout_marginTop="20dp"
-                    android:scaleType="center"
-                    android:scaleX="1.6"
-                    android:scaleY="1.6"
-                    android:src="@drawable/informacion_datos_general"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_height="match_parent">
 
-                </ImageView>
+                    <TextView
+                        android:id="@+id/CalidadDelAireEstim"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="6dp"
+                        android:gravity="center"
+                        android:text="BAJA CONCENTRACIÓN DE O3 EN LA ZONA"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/imageView2"
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="124dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/CalidadDelAireEstim"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/clean_air_icon" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/tarjeta_info_inferior"
+                android:clipToOutline="true"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:background="#fff"
-                    android:padding="10dp"
-                    android:src="@drawable/estadisticaejemplo"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView">
+                    android:layout_height="match_parent">
 
-                </ImageView>
+                    <LinearLayout
+                        android:id="@+id/GraficaContainer"
+                        android:layout_width="310dp"
+                        android:layout_height="159dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toTopOf="@+id/NivelConcentracionText"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#fff"
-                    android:src="@drawable/nivelejemplo"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView2"
-                    app:layout_constraintStart_toStartOf="@+id/imageView2"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView2">
+                        <ImageView
+                            android:id="@+id/GraficaMockup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/grafica_mockup" />
+                    </LinearLayout>
 
-                </ImageView>
+                    <TextView
+                        android:id="@+id/NivelConcentracionText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nivel de concentración actual:"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toTopOf="@+id/MediaEnLaZonaText"
+                        app:layout_constraintEnd_toStartOf="@+id/NivelConcentracion"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                        app:layout_constraintTop_toBottomOf="@+id/GraficaContainer" />
 
+                    <TextView
+                        android:id="@+id/MediaEnLaZonaText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Media de la semana en la zona:"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/MediaEnLaZona"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                        app:layout_constraintTop_toBottomOf="@+id/NivelConcentracionText" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/NivelConcentracion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0,26 µg/m3"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toBottomOf="@+id/NivelConcentracionText"
+                        app:layout_constraintEnd_toEndOf="@+id/GraficaContainer"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/NivelConcentracionText"
+                        app:layout_constraintTop_toTopOf="@+id/NivelConcentracionText" />
 
+                    <TextView
+                        android:id="@+id/MediaEnLaZona"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0,30 µg/m3"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toBottomOf="@+id/MediaEnLaZonaText"
+                        app:layout_constraintEnd_toEndOf="@+id/GraficaContainer"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/MediaEnLaZonaText"
+                        app:layout_constraintTop_toTopOf="@+id/MediaEnLaZonaText" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        </androidx.core.widget.NestedScrollView>
-
-    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
