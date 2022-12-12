@@ -28,7 +28,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
-    protected LocationManager locationManager;
+    public static LocationManager locationManager;
     public static MapView myOpenMapView;
     public static MapController myMapController;
     public static Boolean mapInitialized = false;
@@ -36,15 +36,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     Marker userLocationMarker;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 0.0F, this);
-
+        BTLE.inicializarBlueTooth(this, MainActivity.this);
         FragmentAdapter.inicializarFragmentHome(MainActivity.this, savedInstanceState);
 
     }

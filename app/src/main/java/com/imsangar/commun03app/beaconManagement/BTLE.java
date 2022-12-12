@@ -1,6 +1,9 @@
 package com.imsangar.commun03app.beaconManagement;
 
+import static java.lang.Math.pow;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -16,6 +19,7 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.imsangar.commun03app.MainActivity;
 import com.imsangar.commun03app.RESTrequest.REST;
 import com.imsangar.commun03app.fragments.TabCalibration;
 
@@ -27,11 +31,14 @@ class counters {
     static double anteriorValorMedicion = - 1;
     static double anteriorValorMedicionOffset = - 1;
     public static double Voffset = - 1;
-    static double Vcalibracion = 42.31;
+    static double CalibracionDelSensor = 42.31;
+    static double Vcalibracion = 0.0;
+
 
 
     static double calculaO3(int valorBrutoMedicion) {
         double valorBruto = valorBrutoMedicion * 3.3 / 4096;
+        Vcalibracion = CalibracionDelSensor*499*pow(10,-6);
         double res = valorBruto / Vcalibracion;
         return res;
     }
@@ -124,10 +131,11 @@ public class BTLE {
         elEscanner.startScan(callbackDelEscaneo);
 
     } // ()
+
     // --------------------------------------------------------------
     //resultadoBusquedaBTLE: ScanResult --> mostrarInformacionDispositivoBTLE() -->
     // --------------------------------------------------------------
-    public static void mostrarInformacionDispositivoBTLE( ScanResult resultado ) {
+    public static void mostrarInformacionDispositivoBTLE(ScanResult resultado) {
 
         BluetoothDevice bluetoothDevice = resultado.getDevice();
         byte[] bytes = resultado.getScanRecord().getBytes();
@@ -147,7 +155,7 @@ public class BTLE {
         }*/
 
         Log.d(ETIQUETA_LOG, " dirección = " + bluetoothDevice.getAddress());
-        Log.d(ETIQUETA_LOG, " rssi = " + rssi );
+        Log.d(ETIQUETA_LOG, " rssi = " + rssi);
 
         Log.d(ETIQUETA_LOG, " bytes = " + new String(bytes));
         Log.d(ETIQUETA_LOG, " bytes (" + bytes.length + ") = " + Utilidades.bytesToHexString(bytes));
@@ -176,7 +184,8 @@ public class BTLE {
     // --------------------------------------------------------------
     //uuidSensor:Texto --> buscarEsteDispositivoBTLE() -->
     // --------------------------------------------------------------
-    public static void buscarEsteDispositivoBTLE(final String dispositivoBuscado ) {
+    @SuppressLint("MissingPermission")
+    public static void buscarEsteDispositivoBTLE(final String dispositivoBuscado) {
 
         //-----------------------------------------------------------------------------------------
 
@@ -189,39 +198,37 @@ public class BTLE {
 
         callbackDelEscaneo = new ScanCallback() {
             @Override
-            public void onScanResult( int callbackType, ScanResult resultado ) {
+            public void onScanResult(int callbackType, ScanResult resultado) {
                 super.onScanResult(callbackType, resultado);
                 Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onScanResult() ");
                 byte[] bytes = resultado.getScanRecord().getBytes();
                 TramaIBeacon tib = new TramaIBeacon(bytes);
-                Log.d(">>>>", "onScanResult: "+Utilidades.bytesToHexString(tib.getUUID()));
-                Log.d(">>>>", "dispositivoBuscado: "+dispositivoBuscado);
+                Log.d(">>>>", "onScanResult: " + Utilidades.bytesToHexString(tib.getUUID()));
+                Log.d(">>>>", "dispositivoBuscado: " + dispositivoBuscado);
 
                 //solamente si el sensor tiene el uuid que estoy buscando sigo
-                if(Utilidades.bytesToHexString(tib.getUUID()).equals(dispositivoBuscado)){
-                    mostrarInformacionDispositivoBTLE( resultado );
+                if (Utilidades.bytesToHexString(tib.getUUID()).equals(dispositivoBuscado)) {
+                    mostrarInformacionDispositivoBTLE(resultado);
 
                     //solamente si el valor de la medicion ha cambiado hago POST al servidor para introducir una nueva medicion
-                    if(Utilidades.bytesToInt(tib.getMajor()) == 1){
+                    if (Utilidades.bytesToInt(tib.getMajor()) == 1) {
 
                         TabCalibration.cambiaValorMedicion(counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
                         counters.AnteriorValorBruto = Utilidades.bytesToInt(tib.getMinor());
 
-                        REST.altaNuevaMedicion( Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
+                        REST.altaNuevaMedicion(Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
                         counters.anyadeUnoABeaconCounter();
                         counters.cambiaValorMedicion(counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
-                        if(counters.Voffset != -1){
+                        if (counters.Voffset != - 1) {
                             counters.cambiaValorMedicionConOffset(counters.calcula03ConOffset(Utilidades.bytesToInt(tib.getMinor())));
                             TabCalibration.cambiaValorMedicionConOffset(counters.calcula03ConOffset(Utilidades.bytesToInt(tib.getMinor())));
                         }
 
-                    }
-
-                    else if(Utilidades.bytesToInt(tib.getMajor()) == 2){
+                    } else if (Utilidades.bytesToInt(tib.getMajor()) == 2) {
 
                         TabCalibration.cambiaValorTemperatura(counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
 
-                        REST.altaNuevaMedicion( Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
+                        REST.altaNuevaMedicion(Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
                         counters.anyadeUnoABeaconCounter();
                         counters.cambiaValorMedicion(counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
                     }
@@ -243,13 +250,14 @@ public class BTLE {
             }
         };
 
-        ScanFilter sf = new ScanFilter.Builder().setDeviceName( dispositivoBuscado ).build();
+        ScanFilter sf = new ScanFilter.Builder().setDeviceName(dispositivoBuscado).build();
 
-        Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + dispositivoBuscado );
+        Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + dispositivoBuscado);
         //Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + dispositivoBuscado
         //      + " -> " + Utilidades.stringToUUID( dispositivoBuscado ) );
 
-        elEscanner.startScan( callbackDelEscaneo );
+
+        elEscanner.startScan(callbackDelEscaneo);
     } // ()
 
     // --------------------------------------------------------------

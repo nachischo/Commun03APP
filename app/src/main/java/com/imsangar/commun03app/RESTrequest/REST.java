@@ -93,6 +93,16 @@ public class REST {
                     cuerpo, callback
             );
         }
+
+        //urlDestino:String, cuerpo:String --> nuevaPeticion.post() -->
+        public static void put(String urlDestino, String cuerpo, PeticionarioREST.RespuestaREST callback){
+
+            PeticionarioREST elPeticionario = new PeticionarioREST();
+
+            elPeticionario.hacerPeticionREST("PUT",  urlDestino,
+                    cuerpo, callback
+            );
+        }
     }
 
     //-------------------------------------------------------------

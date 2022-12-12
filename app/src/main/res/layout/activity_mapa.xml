@@ -46,6 +46,17 @@
         app:maxImageSize="36dp"
         app:srcCompat="@drawable/menu_option" />
 
+    <View
+        android:id="@+id/circleOptions"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:background="@drawable/circle"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_options"
+        app:layout_constraintEnd_toEndOf="@+id/fab_options"
+        app:layout_constraintStart_toStartOf="@+id/fab_options"
+        app:layout_constraintTop_toTopOf="@+id/fab_options" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_user_location"
         android:layout_width="wrap_content"
