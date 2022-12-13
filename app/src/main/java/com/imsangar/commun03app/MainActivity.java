@@ -31,13 +31,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public static LocationManager locationManager;
     public static MapView myOpenMapView;
     public static MapController myMapController;
-    public static Boolean mapInitialized = false;
-    public static GeoPoint userLocation = new GeoPoint(40.46326501151092, -3.7142046644713127);
-    Marker userLocationMarker;
+    public static Boolean mapInitialized = true;
+    public static GeoPoint userLocation;
+    Marker userLocationMarker = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        userLocation = new GeoPoint(40.46326501151092, -3.7142046644713127);
 
         BTLE.inicializarBlueTooth(this, MainActivity.this);
         FragmentAdapter.inicializarFragmentHome(MainActivity.this, savedInstanceState);
@@ -59,7 +61,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             mapInitialized=true;
         }
 
-        userLocationMarker.setPosition(userLocation);
+        if(userLocationMarker!=null){
+            userLocationMarker.setPosition(userLocation);
+        }
     }
 
 } // class´

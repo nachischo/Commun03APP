@@ -268,7 +268,13 @@ public class HomeFragment extends Fragment {
         MainActivity.myOpenMapView.getMapCenter().getLongitude();
         MainActivity.myMapController = (MapController) MainActivity.myOpenMapView.getController();
         MainActivity.myMapController.setCenter(MainActivity.userLocation);
-        MainActivity.myMapController.setZoom(7.0);
+        if(MainActivity.userLocation.getLatitude()==40.46326501151092&&MainActivity.userLocation.getLongitude()==-3.7142046644713127){
+            MainActivity.myMapController.setZoom(7.0);
+            MainActivity.mapInitialized = false;
+        }
+        else{
+            MainActivity.myMapController.setZoom(19.0);
+        }
 
     }
 

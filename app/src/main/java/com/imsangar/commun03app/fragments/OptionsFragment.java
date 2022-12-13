@@ -18,6 +18,7 @@ import com.imsangar.commun03app.MainActivity;
 import com.imsangar.commun03app.R;
 import com.imsangar.commun03app.RESTrequest.PeticionarioREST;
 import com.imsangar.commun03app.RESTrequest.REST;
+import com.imsangar.commun03app.beaconManagement.BTLE;
 import com.imsangar.commun03app.databinding.ForgottenPasswordBinding;
 import com.imsangar.commun03app.databinding.OptionsBinding;
 import com.imsangar.commun03app.uiElements.FragmentAdapter;
@@ -61,6 +62,7 @@ public class OptionsFragment extends Fragment {
             Intent intent = new Intent(getContext(), LoginActivity.class );
             startActivity(intent);
             ((MainActivity)getActivity()).finish();
+            BTLE.detenerBusquedaDispositivosBTLE();
         });
 
         return root;

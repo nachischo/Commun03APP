@@ -56,15 +56,15 @@ public class LoginActivityFragment extends Fragment {
         View root = binding.getRoot();
 
         if(!requireArguments().isEmpty()){
-            if(requireArguments().getInt("codigo") == 400){
+            if(requireArguments().getInt("responseCode") == 400){
                 binding.errorLogin.setText("El correo o la contraseña son incorrectos.");
             }
 
-            if(requireArguments().getInt("codigo") == 404){
+            if(requireArguments().getInt("responseCode") == 404){
                 binding.errorLogin.setText("No se ha podido encontrar el sensor asociado.");
             }
 
-            else if(requireArguments().getInt("codigo") == 0){
+            else if(requireArguments().getInt("responseCode") == 0){
                 binding.errorLogin.setText("Parece que hay un error de conexión.");
             }
         }
