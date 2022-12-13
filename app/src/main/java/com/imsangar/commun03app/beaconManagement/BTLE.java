@@ -31,7 +31,7 @@ class counters {
     static double anteriorValorMedicion = - 1;
     static double anteriorValorMedicionOffset = - 1;
     public static double Voffset = - 1;
-    static double CalibracionDelSensor = 42.31;
+    static double CalibracionDelSensor = 48.31;
     static double Vcalibracion = 0.0;
 
 
