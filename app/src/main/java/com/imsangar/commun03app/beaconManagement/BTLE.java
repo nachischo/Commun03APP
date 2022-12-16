@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import com.imsangar.commun03app.MainActivity;
 import com.imsangar.commun03app.RESTrequest.REST;
 import com.imsangar.commun03app.fragments.TabCalibration;
+import com.imsangar.commun03app.services.ServicioNotificaciones;
 
 import java.util.List;
 
@@ -33,6 +34,9 @@ class counters {
     public static double Voffset = - 1;
     static double CalibracionDelSensor = 48.31;
     static double Vcalibracion = 0.0;
+    static double anteriorValorBrutoO3 = 0.0;
+    static double anteriorValorTemperatura = 0.0;
+
 
 
 
@@ -40,7 +44,7 @@ class counters {
         double valorBruto = valorBrutoMedicion * 3.3 / 4096;
         Vcalibracion = CalibracionDelSensor*499*pow(10,-6);
         double res = valorBruto / Vcalibracion;
-        return res;
+        return Math.round(res*100.0)/100.0;
     }
 
     static double calcula03ConOffset(int valorBrutoMedicion) {
@@ -52,7 +56,7 @@ class counters {
     static double calculaTemperatura(int valorBrutoTemperatura) {
         double valorBruto = valorBrutoTemperatura * 3.3 / 4096;
         double res = valorBruto * 29 - 18;
-        return res;
+        return Math.round(res);
     }
 
     static void anyadeUnoABeaconCounter() {
@@ -200,6 +204,7 @@ public class BTLE {
             @Override
             public void onScanResult(int callbackType, ScanResult resultado) {
                 super.onScanResult(callbackType, resultado);
+
                 Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onScanResult() ");
                 byte[] bytes = resultado.getScanRecord().getBytes();
                 TramaIBeacon tib = new TramaIBeacon(bytes);
@@ -209,12 +214,14 @@ public class BTLE {
                 //solamente si el sensor tiene el uuid que estoy buscando sigo
                 if (Utilidades.bytesToHexString(tib.getUUID()).equals(dispositivoBuscado)) {
                     mostrarInformacionDispositivoBTLE(resultado);
+                    ServicioNotificaciones.ultimoDatoEnviado=System.currentTimeMillis()/1000;
 
                     //solamente si el valor de la medicion ha cambiado hago POST al servidor para introducir una nueva medicion
-                    if (Utilidades.bytesToInt(tib.getMajor()) == 1) {
+                    if (Utilidades.bytesToInt(tib.getMajor()) == 1 && counters.calculaO3(Utilidades.bytesToInt(tib.getMinor()))!=counters.anteriorValorBrutoO3) {
 
                         TabCalibration.cambiaValorMedicion(counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
                         counters.AnteriorValorBruto = Utilidades.bytesToInt(tib.getMinor());
+                        counters.anteriorValorBrutoO3 = counters.calculaO3(Utilidades.bytesToInt(tib.getMinor()));
 
                         REST.altaNuevaMedicion(Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaO3(Utilidades.bytesToInt(tib.getMinor())));
                         counters.anyadeUnoABeaconCounter();
@@ -224,8 +231,9 @@ public class BTLE {
                             TabCalibration.cambiaValorMedicionConOffset(counters.calcula03ConOffset(Utilidades.bytesToInt(tib.getMinor())));
                         }
 
-                    } else if (Utilidades.bytesToInt(tib.getMajor()) == 2) {
+                    } else if (Utilidades.bytesToInt(tib.getMajor()) == 2 && counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor()))!=counters.anteriorValorTemperatura) {
 
+                        counters.anteriorValorTemperatura = counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor()));
                         TabCalibration.cambiaValorTemperatura(counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
 
                         REST.altaNuevaMedicion(Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));

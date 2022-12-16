@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.imsangar.commun03app.beaconManagement.BTLE;
+import com.imsangar.commun03app.fragments.HomeFragment;
 import com.imsangar.commun03app.uiElements.FragmentAdapter;
 import com.imsangar.commun03app.uiElements.TabManager;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public static MapView myOpenMapView;
     public static MapController myMapController;
     public static Boolean mapInitialized = true;
+    public static Boolean userFound = false;
     public static GeoPoint userLocation;
     Marker userLocationMarker = null;
 
@@ -58,11 +60,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             userLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
             userLocationMarker.setIcon(getResources().getDrawable(R.drawable.user_location_marker_drawable));
             myOpenMapView.getOverlays().add(userLocationMarker);
+            userFound=true;
             mapInitialized=true;
         }
 
         if(userLocationMarker!=null){
             userLocationMarker.setPosition(userLocation);
+            HomeFragment.actualizaTarjetaDatos();
         }
     }
 

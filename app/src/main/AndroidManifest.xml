@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 
@@ -45,6 +46,12 @@
             android:exported="true">
         </activity>
         <service android:name="com.imsangar.commun03app.services.ServicioEscucharBeacons" />
+        <service
+            android:name="com.imsangar.commun03app.services.ServicioNotificaciones"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver android:name="com.imsangar.commun03app.services.NotificationEventReceiver" />
     </application>
 
 </manifest>

@@ -32,7 +32,8 @@ public class LoginActivityFragment extends Fragment {
                 || ActivityCompat.checkSelfPermission(((LoginActivity)getActivity()), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(((LoginActivity)getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(((LoginActivity)getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(((LoginActivity)getActivity()), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                || ActivityCompat.checkSelfPermission(((LoginActivity)getActivity()), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(((LoginActivity)getActivity()), Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -41,7 +42,7 @@ public class LoginActivityFragment extends Fragment {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(((LoginActivity)getActivity()),
-                    new String[] {Manifest.permission.BLUETOOTH,Manifest.permission.BLUETOOTH_SCAN,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE} ,
+                    new String[] {Manifest.permission.BLUETOOTH,Manifest.permission.BLUETOOTH_SCAN,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.WAKE_LOCK} ,
                     101);
 
             return;
