@@ -53,6 +53,11 @@ public class OptionsFragment extends Fragment {
             MainActivity.mapInitialized = false;
         });
 
+        binding.DevMenuButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), DevActivity.class );
+            startActivity(intent);
+        });
+
         binding.CerrarSesionButton.setOnClickListener(view -> {
             SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();

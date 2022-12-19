@@ -352,7 +352,7 @@ public class HomeFragment extends Fragment {
                         }
 
                         try {
-                            ((TextView) ValorActual).setText(String.valueOf(cuerpoJSON.getDouble("Valor")));
+                            ((TextView) ValorActual).setText(String.valueOf(cuerpoJSON.getDouble("Valor"))+" ppm/m3");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -374,7 +374,7 @@ public class HomeFragment extends Fragment {
                         }
 
                         try {
-                            ((TextView) MaxHoy).setText(String.valueOf(cuerpoJSON.getDouble("Valor")));
+                            ((TextView) MaxHoy).setText(String.valueOf(cuerpoJSON.getDouble("Valor"))+" ppm/m3");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -396,7 +396,7 @@ public class HomeFragment extends Fragment {
                         }
 
                         try {
-                            ((TextView) MinHoy).setText(String.valueOf(cuerpoJSON.getDouble("Valor")));
+                            ((TextView) MinHoy).setText(String.valueOf(Math.round((cuerpoJSON.getDouble("Valor")*100)/100))+" ppm/m3");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -409,7 +409,7 @@ public class HomeFragment extends Fragment {
                     public void callback(int codigo, String cuerpo) {
 
 
-                            ((TextView) MediaHoy).setText(String.valueOf(cuerpo));
+                            ((TextView) MediaHoy).setText(String.valueOf(Math.round((Double.parseDouble(cuerpo)*100)/100))+" ppm/m3");
 
                     }
                 }
@@ -428,7 +428,7 @@ public class HomeFragment extends Fragment {
                         }
 
                         try {
-                            ((TextView) TempActual).setText(String.valueOf(cuerpoJSON.getDouble("Valor")));
+                            ((TextView) TempActual).setText(String.valueOf(cuerpoJSON.getDouble("Valor"))+" ºC");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
