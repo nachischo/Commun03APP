@@ -50,20 +50,22 @@ public class REST {
     //doy de alta una nueva medicion en la base de datos con metodo POST
     //idMedicion: Texto, idSensor: Texto, valorMedicion: N --> altaNuevaMedicion() -->
     public static void altaNuevaMedicion(int idMedicion, String idSensor, double valorMedicion){
-        PeticionarioREST elPeticionario = new PeticionarioREST();
+        if(MainActivity.userFound){
+            PeticionarioREST elPeticionario = new PeticionarioREST();
 
 
-        elPeticionario.hacerPeticionREST("POST",  "https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/",
+            elPeticionario.hacerPeticionREST("POST",  "https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/",
 
-                "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': "+ MainActivity.userLocation.getLatitude() +", 'lon': "+MainActivity.userLocation.getLongitude()+"}",
-                new PeticionarioREST.RespuestaREST () {
-                    @Override
-                    public void callback(int codigo, String cuerpo) {
-                        Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
+                    "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': "+ MainActivity.userLocation.getLatitude() +", 'lon': "+MainActivity.userLocation.getLongitude()+"}",
+                    new PeticionarioREST.RespuestaREST () {
+                        @Override
+                        public void callback(int codigo, String cuerpo) {
+                            Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
 
+                        }
                     }
-                }
-        );
+            );
+        }
     }
 
     //clase genérica para realizar peticiones http get o post

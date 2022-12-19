@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="535dp"
         android:layout_gravity="center_horizontal"
         android:background="@null"
         android:orientation="vertical"
@@ -89,7 +89,6 @@
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toTopOf="@+id/NivelConcentracionText"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -102,26 +101,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/NivelConcentracionText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nivel de concentración actual:"
-                    android:textColor="#1a659e"
-                    app:layout_constraintBottom_toTopOf="@+id/MediaEnLaZonaText"
-                    app:layout_constraintEnd_toStartOf="@+id/NivelConcentracion"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
-                    app:layout_constraintTop_toBottomOf="@+id/GraficaContainer" />
-
-                <TextView
                     android:id="@+id/MediaEnLaZonaText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Media de la semana en la zona:"
+                    android:text="Media de hoy:"
                     android:textColor="#1a659e"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/MediaEnLaZona"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintBottom_toTopOf="@+id/MaximaDeHoyText"
                     app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
                     app:layout_constraintTop_toBottomOf="@+id/NivelConcentracionText" />
 
@@ -129,7 +114,7 @@
                     android:id="@+id/NivelConcentracion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0,26 µg/m3"
+                    android:text="0,00 ppm/m3"
                     android:textColor="#1a659e"
                     app:layout_constraintBottom_toBottomOf="@+id/NivelConcentracionText"
                     app:layout_constraintEnd_toEndOf="@+id/GraficaContainer"
@@ -138,16 +123,96 @@
                     app:layout_constraintTop_toTopOf="@+id/NivelConcentracionText" />
 
                 <TextView
-                    android:id="@+id/MediaEnLaZona"
+                    android:id="@+id/MediaDeHoy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0,30 µg/m3"
+                    android:text="0,00 ppm/m3"
                     android:textColor="#1a659e"
                     app:layout_constraintBottom_toBottomOf="@+id/MediaEnLaZonaText"
-                    app:layout_constraintEnd_toEndOf="@+id/GraficaContainer"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/MediaEnLaZonaText"
-                    app:layout_constraintTop_toTopOf="@+id/MediaEnLaZonaText" />
+                    app:layout_constraintEnd_toEndOf="@+id/NivelConcentracion"
+                    app:layout_constraintHorizontal_bias="0.834"
+                    app:layout_constraintStart_toStartOf="@+id/NivelConcentracion"
+                    app:layout_constraintTop_toTopOf="@+id/MediaEnLaZonaText"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/MaximaDeHoyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Máxima de hoy:"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toTopOf="@+id/MinimaDeHoyText"
+                    app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/MediaEnLaZonaText" />
+
+                <TextView
+                    android:id="@+id/NivelConcentracionText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nivel de concentración actual:"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toTopOf="@+id/MediaEnLaZonaText"
+                    app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/GraficaContainer" />
+
+                <TextView
+                    android:id="@+id/MaximaDeHoy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0,00 ppm/m3"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toBottomOf="@+id/MaximaDeHoyText"
+                    app:layout_constraintEnd_toEndOf="@+id/MediaDeHoy"
+                    app:layout_constraintHorizontal_bias="0.746"
+                    app:layout_constraintStart_toStartOf="@+id/MediaDeHoy"
+                    app:layout_constraintTop_toTopOf="@+id/MaximaDeHoyText"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/MinimaDeHoyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mínima de hoy:"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toTopOf="@+id/TemperaturaText"
+                    app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/MaximaDeHoyText" />
+
+                <TextView
+                    android:id="@+id/MinimaDeHoy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0,00 ppm/m3"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toBottomOf="@+id/MinimaDeHoyText"
+                    app:layout_constraintEnd_toEndOf="@+id/MaximaDeHoy"
+                    app:layout_constraintHorizontal_bias="0.751"
+                    app:layout_constraintStart_toStartOf="@+id/MaximaDeHoy"
+                    app:layout_constraintTop_toTopOf="@+id/MinimaDeHoyText"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/TemperaturaText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Temperatura actual:"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/MinimaDeHoyText" />
+
+                <TextView
+                    android:id="@+id/Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0ºC"
+                    android:textColor="#1a659e"
+                    app:layout_constraintBottom_toBottomOf="@+id/TemperaturaText"
+                    app:layout_constraintEnd_toEndOf="@+id/MinimaDeHoy"
+                    app:layout_constraintHorizontal_bias="0.692"
+                    app:layout_constraintStart_toStartOf="@+id/MinimaDeHoy"
+                    app:layout_constraintTop_toTopOf="@+id/TemperaturaText"
+                    app:layout_constraintVertical_bias="0.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </LinearLayout>
