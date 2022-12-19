@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.XmlRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -168,7 +169,7 @@ public class LoginLoadingFragment extends Fragment {
 
         Log.d("nuevoPostLogin", "{ 'email': '"+requireArguments().getString("email")+"', 'password': '"+requireArguments().getString("password")+"' }");
         try {
-            REST.nuevaPeticion.post("http://172.20.10.2:3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", requireArguments().getString("email")).put("password", requireArguments().getString("password"))), new PeticionarioREST.RespuestaREST() {
+            REST.nuevaPeticion.post("http://"+ R.string.server_ip +":3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", requireArguments().getString("email")).put("password", requireArguments().getString("password"))), new PeticionarioREST.RespuestaREST() {
                 @Override
                 public void callback(int codigo, String cuerpo) {
                     if(codigo == 200){
@@ -197,7 +198,7 @@ public class LoginLoadingFragment extends Fragment {
 
                         editarPreferencias.commit();
 
-                        REST.nuevaPeticion.get("http://172.20.10.2:3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
+                        REST.nuevaPeticion.get("http://"+ R.string.server_ip +":3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
                             @Override
                             public void callback(int codigo, String cuerpo) {
                                 if(codigo == 200) {
