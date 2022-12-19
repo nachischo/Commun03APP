@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/openmapview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_sensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="45dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="@color/white"
+        app:backgroundTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="40dp"
+        app:srcCompat="@drawable/sensoricon" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="30dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="36dp"
+        app:srcCompat="@drawable/menu_option" />
+
+    <View
+        android:id="@+id/circleOptions"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:background="@drawable/circle"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_options"
+        app:layout_constraintEnd_toEndOf="@+id/fab_options"
+        app:layout_constraintStart_toStartOf="@+id/fab_options"
+        app:layout_constraintTop_toTopOf="@+id/fab_options" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_user_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="30dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="32dp"
+        app:srcCompat="@drawable/locationicon" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/info_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_sensor"
+        app:layout_constraintStart_toEndOf="@+id/fab_sensor"
+        app:layout_constraintTop_toTopOf="@+id/fab_sensor"
+        app:srcCompat="@android:drawable/ic_menu_info_details" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/copy_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/fab_sensor"
+        app:layout_constraintStart_toStartOf="@+id/fab_sensor"
+        app:layout_constraintTop_toBottomOf="@+id/fab_sensor"
+        app:srcCompat="?attr/actionModeCopyDrawable" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/message_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/info_floating_button"
+        app:layout_constraintStart_toEndOf="@+id/copy_floating_button"
+        app:layout_constraintTop_toBottomOf="@+id/info_floating_button"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="411dp"
+        android:layout_height="532dp"
+        app:layout_constraintBottom_toBottomOf="@+id/openmapview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:context=".MainActivity">
+        <!-- Adding bottom sheet after main content -->
+        <LinearLayout
+            android:id="@+id/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="535dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@null"
+            android:orientation="vertical"
+            android:padding="20dp"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="130dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="114dp"
+                android:background="@drawable/tarjeta_info_superior"
+                android:clipToOutline="true"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/CalidadDelAireEstim"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="6dp"
+                        android:gravity="center"
+                        android:text="BAJA CONCENTRACIÓN DE O3 EN LA ZONA"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="124dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/CalidadDelAireEstim"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/clean_air_icon" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/tarjeta_info_inferior"
+                android:clipToOutline="true"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/GraficaContainer"
+                        android:layout_width="310dp"
+                        android:layout_height="159dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toTopOf="@+id/NivelConcentracionText"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/GraficaMockup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/grafica_mockup" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/MediaEnLaZonaText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Media de hoy:"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toTopOf="@+id/MaximaDeHoyText"
+                        app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                        app:layout_constraintTop_toBottomOf="@+id/NivelConcentracionText" />
+
+                    <TextView
+                        android:id="@+id/NivelConcentracion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0,00 ppm/m3"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toBottomOf="@+id/NivelConcentracionText"
+                        app:layout_constraintEnd_toEndOf="@+id/GraficaContainer"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/NivelConcentracionText"
+                        app:layout_constraintTop_toTopOf="@+id/NivelConcentracionText" />
+
+                    <TextView
+                        android:id="@+id/MediaDeHoy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0,00 ppm/m3"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toBottomOf="@+id/MediaEnLaZonaText"
+                        app:layout_constraintEnd_toEndOf="@+id/NivelConcentracion"
+                        app:layout_constraintHorizontal_bias="0.834"
+                        app:layout_constraintStart_toStartOf="@+id/NivelConcentracion"
+                        app:layout_constraintTop_toTopOf="@+id/MediaEnLaZonaText"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/MaximaDeHoyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Máxima de hoy:"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toTopOf="@+id/MinimaDeHoyText"
+                        app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                        app:layout_constraintTop_toBottomOf="@+id/MediaEnLaZonaText" />
+
+                    <TextView
+                        android:id="@+id/NivelConcentracionText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nivel de concentración actual:"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toTopOf="@+id/MediaEnLaZonaText"
+                        app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                        app:layout_constraintTop_toBottomOf="@+id/GraficaContainer" />
+
+                    <TextView
+                        android:id="@+id/MaximaDeHoy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0,00 ppm/m3"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toBottomOf="@+id/MaximaDeHoyText"
+                        app:layout_constraintEnd_toEndOf="@+id/MediaDeHoy"
+                        app:layout_constraintHorizontal_bias="0.746"
+                        app:layout_constraintStart_toStartOf="@+id/MediaDeHoy"
+                        app:layout_constraintTop_toTopOf="@+id/MaximaDeHoyText"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/MinimaDeHoyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mínima de hoy:"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toTopOf="@+id/TemperaturaText"
+                        app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                        app:layout_constraintTop_toBottomOf="@+id/MaximaDeHoyText" />
+
+                    <TextView
+                        android:id="@+id/MinimaDeHoy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0,00 ppm/m3"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toBottomOf="@+id/MinimaDeHoyText"
+                        app:layout_constraintEnd_toEndOf="@+id/MaximaDeHoy"
+                        app:layout_constraintHorizontal_bias="0.751"
+                        app:layout_constraintStart_toStartOf="@+id/MaximaDeHoy"
+                        app:layout_constraintTop_toTopOf="@+id/MinimaDeHoyText"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/TemperaturaText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Temperatura actual:"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/GraficaContainer"
+                        app:layout_constraintTop_toBottomOf="@+id/MinimaDeHoyText" />
+
+                    <TextView
+                        android:id="@+id/Temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0ºC"
+                        android:textColor="#1a659e"
+                        app:layout_constraintBottom_toBottomOf="@+id/TemperaturaText"
+                        app:layout_constraintEnd_toEndOf="@+id/MinimaDeHoy"
+                        app:layout_constraintHorizontal_bias="0.692"
+                        app:layout_constraintStart_toStartOf="@+id/MinimaDeHoy"
+                        app:layout_constraintTop_toTopOf="@+id/TemperaturaText"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

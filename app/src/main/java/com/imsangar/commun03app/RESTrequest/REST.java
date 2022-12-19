@@ -2,6 +2,8 @@ package com.imsangar.commun03app.RESTrequest;
 
 import android.util.Log;
 
+import com.imsangar.commun03app.MainActivity;
+
 
 public class REST {
     //-------------------------------------------------------------
@@ -48,20 +50,22 @@ public class REST {
     //doy de alta una nueva medicion en la base de datos con metodo POST
     //idMedicion: Texto, idSensor: Texto, valorMedicion: N --> altaNuevaMedicion() -->
     public static void altaNuevaMedicion(int idMedicion, String idSensor, double valorMedicion){
-        PeticionarioREST elPeticionario = new PeticionarioREST();
+        if(MainActivity.userFound){
+            PeticionarioREST elPeticionario = new PeticionarioREST();
 
 
-        elPeticionario.hacerPeticionREST("POST",  "https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/",
+            elPeticionario.hacerPeticionREST("POST",  "https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/",
 
-                "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': '38.9964288', 'lon': '-0.1661116'}",
-                new PeticionarioREST.RespuestaREST () {
-                    @Override
-                    public void callback(int codigo, String cuerpo) {
-                        Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
+                    "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': "+ MainActivity.userLocation.getLatitude() +", 'lon': "+MainActivity.userLocation.getLongitude()+"}",
+                    new PeticionarioREST.RespuestaREST () {
+                        @Override
+                        public void callback(int codigo, String cuerpo) {
+                            Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
 
+                        }
                     }
-                }
-        );
+            );
+        }
     }
 
     //clase genérica para realizar peticiones http get o post
@@ -88,6 +92,16 @@ public class REST {
             PeticionarioREST elPeticionario = new PeticionarioREST();
 
             elPeticionario.hacerPeticionREST("POST",  urlDestino,
+                    cuerpo, callback
+            );
+        }
+
+        //urlDestino:String, cuerpo:String --> nuevaPeticion.post() -->
+        public static void put(String urlDestino, String cuerpo, PeticionarioREST.RespuestaREST callback){
+
+            PeticionarioREST elPeticionario = new PeticionarioREST();
+
+            elPeticionario.hacerPeticionREST("PUT",  urlDestino,
                     cuerpo, callback
             );
         }

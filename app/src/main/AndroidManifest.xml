@@ -9,19 +9,27 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 
     <application
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/communo3_appicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/communo3_appicon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Commun03APP"
         android:usesCleartextTraffic="true"
         >
         <activity
-            android:name="com.imsangar.commun03app.MainActivity"
+            android:name="com.imsangar.commun03app.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +37,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.imsangar.commun03app.MainActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name="com.imsangar.commun03app.DevActivity"
+            android:exported="true">
+        </activity>
         <service android:name="com.imsangar.commun03app.services.ServicioEscucharBeacons" />
+        <service
+            android:name="com.imsangar.commun03app.services.ServicioNotificaciones"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver android:name="com.imsangar.commun03app.services.NotificationEventReceiver" />
     </application>
 
 </manifest>
