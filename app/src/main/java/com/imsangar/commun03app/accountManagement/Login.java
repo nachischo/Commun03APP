@@ -28,6 +28,7 @@ import org.json.JSONObject;
 public class Login {
 
     public Context context;
+    private String serverIP = "172.20.10.5";
 
     public Login(Context context){
         this.context = context;
@@ -36,7 +37,7 @@ public class Login {
     public void iniciaSesion(FragmentActivity actividad, Context contexto, Bundle savedInstanceState, String emailUsuario, String passwordUsuario){
         Log.d("nuevoPostLogin", "{ 'email': '"+emailUsuario+"', 'password': '"+passwordUsuario+"' }");
         try {
-            REST.nuevaPeticion.post("http://172.20.10.5:3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", emailUsuario).put("password", passwordUsuario)), new PeticionarioREST.RespuestaREST() {
+            REST.nuevaPeticion.post("http://"+serverIP+":3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", emailUsuario).put("password", passwordUsuario)), new PeticionarioREST.RespuestaREST() {
                 @Override
                 public void callback(int codigo, String cuerpo) {
                     if(codigo == 200){
@@ -65,7 +66,7 @@ public class Login {
 
                         editarPreferencias.commit();
 
-                        REST.nuevaPeticion.get("http://172.20.10.5:3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
+                        REST.nuevaPeticion.get("http://"+serverIP+":3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
                             @Override
                             public void callback(int codigo, String cuerpo) {
                                 if(codigo == 200) {
