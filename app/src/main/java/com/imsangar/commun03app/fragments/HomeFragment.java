@@ -6,8 +6,10 @@ import static android.content.Context.MODE_PRIVATE;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +21,7 @@ import android.os.Bundle;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +48,6 @@ import com.imsangar.commun03app.RESTrequest.REST;
 import com.imsangar.commun03app.beaconManagement.BTLE;
 import com.imsangar.commun03app.databinding.ActivityMapaBinding;
 import com.imsangar.commun03app.databinding.HomeBinding;
-import com.imsangar.commun03app.services.NotificationEventReceiver;
 import com.imsangar.commun03app.services.ServicioNotificaciones;
 import com.imsangar.commun03app.uiElements.FragmentAdapter;
 
@@ -104,18 +106,22 @@ public class HomeFragment extends Fragment {
             notificationManager = getContext().getSystemService(NotificationManager.class);
         }
 
-        /*NotificationCompat.Builder builder = new NotificationCompat.Builder(((MainActivity)getActivity()), "ns")
-                .setSmallIcon(R.drawable.nuevo_logo_sin_nombre)
-                .setContentTitle("CommunO3")
-                .setContentText("Cómeme los huevos")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(((MainActivity)getActivity()));
-
-        notificationManager.notify(1, builder.build());*/
-
-        NotificationEventReceiver.setupAlarm(((MainActivity) getActivity()).getApplicationContext());
-        ServicioNotificaciones.ultimoDatoEnviado = System.currentTimeMillis() / 1000;
+        //---------------------------------------------------------------------------------------------------------------
+        //-------------------------------arrancar servicio notificaciones------------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------
+        Intent intent = new Intent(getActivity().getApplicationContext(), ServicioNotificaciones.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        //alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, System.currentTimeMillis()+0, pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60000, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 360000, 1800000, pendingIntent);
+        }
+        Log.d("servicionotificaciones", String.valueOf(alarmManager.getNextAlarmClock().getTriggerTime()));
+        //---------------------------------------------------------------------------------------------------------------
+        //-----------------------------fin arrancar servicio notificaciones----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = ((MainActivity) getActivity()).getWindow();
@@ -143,18 +149,26 @@ public class HomeFragment extends Fragment {
         };
 
 
+        //fragmento de código que comprueba si el marcador del usuario se encuentra visible en pantalla.
+        //En caso de no ser así, hacer visible el botón para centrar el mapa en la ubicaciín del usuario.
         runnableMapCentered = new Runnable() {
 
             public void run() {
+                //obtener el centro del mapa
                 GeoPoint mapCenter = (GeoPoint) MainActivity.myOpenMapView.getMapCenter();
+                //obtener la última posición conocida del usuario
                 GeoPoint userLocation = MainActivity.userLocation;
 
+                //si la latitud o longitud del centro del mapa disciernen en MÁS de 0.002 grados de la del usuario...
                 if (mapCenter.getLatitude() < userLocation.getLatitude() - 0.002 || mapCenter.getLatitude() > userLocation.getLatitude() + 0.002 || mapCenter.getLongitude() < userLocation.getLongitude() - 0.002 || mapCenter.getLongitude() > userLocation.getLongitude() + 0.002) {
                     if (!yaAnimeFabUserLocVisible) {
+                        //indicar que el botón es visible
                         yaAnimeFabUserLocVisible = true;
+                        //resetear la variable que indica que se desactivó el botón
                         yaAnimeFabUserLocInvisible = false;
                         binding.fabUserLocation.setTag(true);
                         binding.fabUserLocation.bringToFront();
+                        //hacer el botón visible con una animación
                         binding.fabUserLocation.setVisibility(View.VISIBLE);
                         binding.fabUserLocation.animate()
                                 .alpha(1f)
@@ -165,6 +179,7 @@ public class HomeFragment extends Fragment {
                                         binding.fabUserLocation.setVisibility(View.VISIBLE);
                                     }
                                 });
+                        //volver a comprobar si el mapa está descentrado tras 2s
                         handler = new Handler();
                         handler.postAtTime(vuelveAempezar, System.currentTimeMillis() + 2000);
                         handler.postDelayed(vuelveAempezar, 2000);
@@ -174,11 +189,16 @@ public class HomeFragment extends Fragment {
                         handler.postDelayed(vuelveAempezar, 2000);
                     }
                 }
+                //si la latitud o longitud del centro del mapa disciernen en MENOS de 0.002 grados de la del usuario...
                 if (mapCenter.getLatitude() > userLocation.getLatitude() - 0.002 && mapCenter.getLatitude() < userLocation.getLatitude() + 0.002 && mapCenter.getLongitude() > userLocation.getLongitude() - 0.002 && mapCenter.getLongitude() < userLocation.getLongitude() + 0.002) {
+                    //si el botón de centrado del mapa sigue siendo visible...
                     if (!yaAnimeFabUserLocInvisible) {
+                        //indicar que el botón ya no es visible
                         yaAnimeFabUserLocInvisible = true;
+                        //resetear la variable que indica que se activó el botón
                         yaAnimeFabUserLocVisible = false;
                         binding.fabUserLocation.setTag(false);
+                        //hacer el botón invisible con una animación
                         binding.fabUserLocation.animate()
                                 .alpha(0f)
                                 .setDuration(500)
@@ -189,6 +209,7 @@ public class HomeFragment extends Fragment {
                                     }
                                 });
                         handler = new Handler();
+                        //volver a comprobar si el mapa está descentrado tras 2s
                         handler.postAtTime(vuelveAempezar, System.currentTimeMillis() + 2000);
                         handler.postDelayed(vuelveAempezar, 2000);
                     } else {
@@ -200,6 +221,7 @@ public class HomeFragment extends Fragment {
             }
         };
 
+        //correr el fragmento de código para comprobar si el mapa está descentrado tras 4s
         handler.postAtTime(runnableMapCentered, System.currentTimeMillis() + 4000);
         handler.postDelayed(runnableMapCentered, 4000);
 
@@ -214,14 +236,17 @@ public class HomeFragment extends Fragment {
         binding = ActivityMapaBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        //obtener la información guardada del usuario con sesión iniciada
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", MODE_PRIVATE);
 
+        //iniciar el servicio de búsqueda de beacons procedentes del sensor asociado al usuario
         BTLE.buscarEsteDispositivoBTLE(sharedPreferences.getString("uuid", "no hay uuid para buscar"));
 
         MainActivity.locationManager = (LocationManager) ((MainActivity) getActivity()).getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(((MainActivity) getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(((MainActivity) getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return new View(getContext());
         }
+        //inicializar el servicio de ubicación del usuario si se han concedido los permisos pertinentes
         ((MainActivity) getActivity()).locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 0.0F, ((MainActivity) getActivity()));
 
 
@@ -335,6 +360,7 @@ public class HomeFragment extends Fragment {
 
     }
 
+    //función para actualizar los datos de la tarjeta
     public static void actualizaTarjetaDatos() {
 
 

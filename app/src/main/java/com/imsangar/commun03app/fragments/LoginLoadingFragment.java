@@ -50,6 +50,9 @@ public class LoginLoadingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //------------------------------------------------------------------------------------------
+        //-----------------------------------animación de carga-------------------------------------
+        //------------------------------------------------------------------------------------------
         vuelveAempezar = new Runnable() {
             @Override
             public void run() {
@@ -154,8 +157,13 @@ public class LoginLoadingFragment extends Fragment {
 
         handler.postAtTime(deNadaa0, System.currentTimeMillis()+intervalBetweenAnimations);
         handler.postDelayed(deNadaa0, intervalBetweenAnimations);
+        //------------------------------------------------------------------------------------------
+        //-------------------------------fin animación de carga-------------------------------------
+        //------------------------------------------------------------------------------------------
 
+        //instanciar la clase Login
         Login LoginObject = new Login(getContext());
+        //llamar a la función encargada de iniciar sesión
         LoginObject.iniciaSesion(((LoginActivity)getActivity()), getContext(), savedInstanceState, requireArguments().getString("email"), requireArguments().getString("password"));
 
         //bypass login for dev purposes
@@ -175,12 +183,14 @@ public class LoginLoadingFragment extends Fragment {
         return root;
     }
 
-
+    //función encargada de gestionar un error al iniciar sesión
     public void errorEnInicioDeSesion(FragmentActivity actividad, Bundle savedInstanceState, int codigo, String cuerpo){
         Log.d( "nuevoPostLogin fallido", "codigo de error = " + codigo );
+        //crear un paquete con información sobre el error ocurrido
         Bundle bundleReqRes = new Bundle();
         bundleReqRes.putInt("responseCode" , codigo);
         bundleReqRes.putString("responseBody" , cuerpo);
+        //inicializar nuevamente el fragment de inicio de sesión
         FragmentAdapter.volverAFragmentLogin(actividad, savedInstanceState, bundleReqRes);
     }
 

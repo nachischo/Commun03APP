@@ -14,7 +14,9 @@ public class DevActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //inicializar la ui del menú de desarrollador
         TabManager.inicializarTabs(DevActivity.this);
+        //inicializar el bluetooth del dispositivo
         BTLE.inicializarBlueTooth(this, DevActivity.this);
 
     }

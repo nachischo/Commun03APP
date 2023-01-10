@@ -9,6 +9,7 @@ public class REST {
     //-------------------------------------------------------------
     //---------------------------REST------------------------------
     //-------------------------------------------------------------
+    //función para probar que es posible realizar peticiones de tipo POST
     public static void probarEnviarPOST() {
         PeticionarioREST elPeticionario = new PeticionarioREST();
 
@@ -31,6 +32,7 @@ public class REST {
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
+    //función para probar que es posible realizar peticiones de tipo GET
     public static void probarEnviarGET() {
         PeticionarioREST elPeticionario = new PeticionarioREST();
 
@@ -47,13 +49,14 @@ public class REST {
 
     } // ()
 
-    //doy de alta una nueva medicion en la base de datos con metodo POST
+    //dar de alta una nueva medicion en la base de datos con metodo POST
     //idMedicion: Texto, idSensor: Texto, valorMedicion: N --> altaNuevaMedicion() -->
     public static void altaNuevaMedicion(int idMedicion, String idSensor, double valorMedicion){
+        //si la ubicación actual del usuario ha sido encontrada...
         if(MainActivity.userFound){
             PeticionarioREST elPeticionario = new PeticionarioREST();
 
-
+            //realizar una petición de tipo POST que incluya en el cuerpo el id del sensor, el valor de la medición y la ubicación en la que se ha tomado
             elPeticionario.hacerPeticionREST("POST",  "https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/",
 
                     "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': "+ MainActivity.userLocation.getLatitude() +", 'lon': "+MainActivity.userLocation.getLongitude()+"}",
@@ -71,6 +74,7 @@ public class REST {
     //clase genérica para realizar peticiones http get o post
     //, 'tiempo': '"+System.currentTimeMillis()/1000+"'
 
+    //clase para simplificación de peticiones
     public static class nuevaPeticion{
 
         //urlDestino:String --> nuevaPeticion.get() -->
