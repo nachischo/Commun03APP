@@ -54,14 +54,24 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="124dp"
+                    android:id="@+id/imageView"
+                    android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/imageView3"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView3"
+                    app:layout_constraintStart_toStartOf="@+id/imageView3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/flecha_dos_direcciones" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="120dp"
+                    android:layout_height="88dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/CalidadDelAireEstim"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/clean_air_icon" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

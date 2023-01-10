@@ -26,52 +26,6 @@ import com.imsangar.commun03app.services.ServicioNotificaciones;
 
 import java.util.List;
 
-class counters {
-    static int BeaconCounter = 1;
-    static int AnteriorValorBruto = 0;
-    static double anteriorValorMedicion = - 1;
-    static double anteriorValorMedicionOffset = - 1;
-    public static double Voffset = - 1;
-    static double CalibracionDelSensor = 48.31;
-    static double Vcalibracion = 0.0;
-    static double anteriorValorBrutoO3 = 0.0;
-    static double anteriorValorTemperatura = 0.0;
-
-
-
-
-    static double calculaO3(int valorBrutoMedicion) {
-        double valorBruto = valorBrutoMedicion * 3.3 / 4096;
-        Vcalibracion = CalibracionDelSensor*499*pow(10,-6);
-        double res = valorBruto / Vcalibracion;
-        return Math.round(res*100.0)/100.0;
-    }
-
-    static double calcula03ConOffset(int valorBrutoMedicion) {
-        double valorBruto = valorBrutoMedicion * 3.3 / 4096 - Voffset;
-        double res = valorBruto / Vcalibracion;
-        return res;
-    }
-
-    static double calculaTemperatura(int valorBrutoTemperatura) {
-        double valorBruto = valorBrutoTemperatura * 3.3 / 4096;
-        double res = valorBruto * 29 - 18;
-        return Math.round(res);
-    }
-
-    static void anyadeUnoABeaconCounter() {
-        BeaconCounter++;
-    }
-
-    static void cambiaValorMedicion(double nuevoValorMedicion) {
-        anteriorValorMedicion = nuevoValorMedicion;
-    }
-
-    static void cambiaValorMedicionConOffset(double nuevoValorMedicionOffset) {
-        anteriorValorMedicionOffset = nuevoValorMedicionOffset;
-    }
-}
-
 public class BTLE {
     // --------------------------------------------------------------
     // -------------------------BTLE---------------------------------
@@ -214,7 +168,7 @@ public class BTLE {
                 //solamente si el sensor tiene el uuid que estoy buscando sigo
                 if (Utilidades.bytesToHexString(tib.getUUID()).equals(dispositivoBuscado)) {
                     mostrarInformacionDispositivoBTLE(resultado);
-                    ServicioNotificaciones.ultimoDatoEnviado=System.currentTimeMillis()/1000;
+                    //ServicioNotificaciones.ultimoDatoEnviado=System.currentTimeMillis()/1000;
 
                     //solamente si el valor de la medicion ha cambiado hago POST al servidor para introducir una nueva medicion
                     if (Utilidades.bytesToInt(tib.getMajor()) == 1 && counters.calculaO3(Utilidades.bytesToInt(tib.getMinor()))!=counters.anteriorValorBrutoO3) {
