@@ -41,7 +41,7 @@ public class Login {
         Log.d("nuevoPostLogin", "{ 'email': '"+emailUsuario+"', 'password': '"+passwordUsuario+"' }");
         try {
             //realizar una petición de tipo POST donde en el cuerpo aparecen el email y la contraseña del usuario
-            REST.nuevaPeticion.post("http://"+serverIP+":3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", emailUsuario).put("password", passwordUsuario)), new PeticionarioREST.RespuestaREST() {
+            REST.nuevaPeticion.post("http://communo3.dalfmos.upv.edu.es/api/usuarios/login", String.valueOf(new JSONObject().put("email", emailUsuario).put("password", passwordUsuario)), new PeticionarioREST.RespuestaREST() {
                 @Override
                 public void callback(int codigo, String cuerpo) {
                     //si el código de respuesta es 200 (OK)...
@@ -78,13 +78,22 @@ public class Login {
                         editarPreferencias.commit();
 
                         //realizar una petición de tipo get para conocer la información del sensor asociado al usuario
-                        REST.nuevaPeticion.get("http://"+serverIP+":3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
+                        REST.nuevaPeticion.get("http://communo3.dalfmos.upv.edu.es/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
                             @Override
                             public void callback(int codigo, String cuerpo) {
                                 if(codigo == 200) {
 
+                                    if(cuerpo.equals("")){
+                                        SharedPreferences sharedPreferences = contexto.getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
+                                        editarPreferencias.clear();
+                                        editarPreferencias.commit();
+                                        FragmentAdapter.inicializarFragmentNoSensorAssociated(actividad, savedInstanceState);
+                                    }else{
+
                                     //si el código de respuesta es 200 (OK)...
                                     JSONObject cuerpoJSON = null;
+
                                     try {
                                         //convertir el cuerpo de la respuesta a un objeto JSON
                                         cuerpoJSON = new JSONObject(cuerpo);
@@ -111,7 +120,7 @@ public class Login {
                                     //iniciar la actividad principal con la sesión iniciada
                                     Intent intent = new Intent(context, MainActivity.class);
                                     context.startActivity(intent);
-
+                                    }
                                 }
                                 //si el código no fué 200 (OK), llamar a la función que gestiona los errores de inicio de sesión
                                 else{

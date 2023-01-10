@@ -11,6 +11,7 @@ import com.imsangar.commun03app.fragments.FragmentPruebaHome;
 import com.imsangar.commun03app.fragments.HomeFragment;
 import com.imsangar.commun03app.fragments.LoginActivityFragment;
 import com.imsangar.commun03app.fragments.LoginLoadingFragment;
+import com.imsangar.commun03app.fragments.NoSensorAssociatedFragment;
 import com.imsangar.commun03app.fragments.OptionsFragment;
 
 public class FragmentAdapter {
@@ -60,6 +61,18 @@ public class FragmentAdapter {
             actividad.getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .add(R.id.fragmentContainerView, HomeFragment.class, null)
+                    .commit();
+        }
+    }
+
+    //función encargada de inicializar la ui de error cuando el usuario no tiene ningún sensor asociado
+    public static void inicializarFragmentNoSensorAssociated(FragmentActivity actividad, Bundle savedInstanceState) {
+        actividad.setContentView(R.layout.activity_principal);
+
+        if (savedInstanceState == null) {
+            actividad.getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragmentContainerView, NoSensorAssociatedFragment.class, null)
                     .commit();
         }
     }
