@@ -226,7 +226,8 @@ public class HomeFragment extends Fragment {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", MODE_PRIVATE);
 
         //iniciar el servicio de búsqueda de beacons procedentes del sensor asociado al usuario
-        BTLE.buscarEsteDispositivoBTLE(sharedPreferences.getString("uuid", "no hay uuid para buscar"));
+        BTLE BTLEObject = new BTLE(getContext());
+        BTLEObject.buscarEsteDispositivoBTLE(sharedPreferences.getString("uuid", "no hay uuid para buscar"));
 
         MainActivity.locationManager = (LocationManager) ((MainActivity) getActivity()).getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(((MainActivity) getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(((MainActivity) getActivity()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -347,7 +348,7 @@ public class HomeFragment extends Fragment {
     }
 
     //función para actualizar los datos de la tarjeta
-    public static void actualizaTarjetaDatos() {
+    public void actualizaTarjetaDatos() {
 
 
         REST.nuevaPeticion.get("https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/api.php?queQuieres=Ultimo&tipo=1", new PeticionarioREST.RespuestaREST() {
@@ -365,6 +366,20 @@ public class HomeFragment extends Fragment {
 
                         try {
                             ((TextView) ValorActual).setText(String.valueOf(cuerpoJSON.getDouble("Valor"))+" ppm/m3");
+
+                            /*
+                            View tarjeta = ((MainActivity)getActivity()).findViewById(R.id.tarjetaInfoSuperiorLayout);
+                            if(cuerpoJSON.getDouble("Valor")<1){
+                                tarjeta.setBackgroundResource(R.drawable.tarjeta_info_superior);
+                            }
+                            else if(cuerpoJSON.getDouble("Valor")>1){
+                                tarjeta.setBackgroundResource(R.drawable.tarjeta_info_superior_naranja);
+                            }
+                            else{
+                                tarjeta.setBackgroundResource(R.drawable.tarjeta_info_superior_rojo);
+                            }
+
+                             */
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

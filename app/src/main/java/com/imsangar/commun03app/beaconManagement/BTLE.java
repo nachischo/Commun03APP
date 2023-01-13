@@ -1,5 +1,6 @@
 package com.imsangar.commun03app.beaconManagement;
 
+import static android.content.Context.MODE_PRIVATE;
 import static java.lang.Math.pow;
 
 import android.Manifest;
@@ -12,17 +13,23 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.imsangar.commun03app.MainActivity;
+import com.imsangar.commun03app.RESTrequest.PeticionarioREST;
 import com.imsangar.commun03app.RESTrequest.REST;
 import com.imsangar.commun03app.fragments.TabCalibration;
 import com.imsangar.commun03app.services.ServicioNotificaciones;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -30,6 +37,12 @@ public class BTLE {
     // --------------------------------------------------------------
     // -------------------------BTLE---------------------------------
     // --------------------------------------------------------------
+    public Context context;
+
+    public BTLE(Context contexto){
+        this.context=contexto;
+    }
+
     private static final String ETIQUETA_LOG = ">>>>";
 
     public static final int CODIGO_PETICION_PERMISOS = 11223344;
@@ -143,7 +156,7 @@ public class BTLE {
     //uuidSensor:Texto --> buscarEsteDispositivoBTLE() -->
     // --------------------------------------------------------------
     @SuppressLint("MissingPermission")
-    public static void buscarEsteDispositivoBTLE(final String dispositivoBuscado) {
+    public void buscarEsteDispositivoBTLE(final String dispositivoBuscado) {
 
         //-----------------------------------------------------------------------------------------
 
@@ -168,6 +181,26 @@ public class BTLE {
                 //solamente si el sensor tiene el uuid que estoy buscando sigo
                 if (Utilidades.bytesToHexString(tib.getUUID()).equals(dispositivoBuscado)) {
                     mostrarInformacionDispositivoBTLE(resultado);
+
+                    SharedPreferences userPrefs = context.getSharedPreferences("shared_prefs",MODE_PRIVATE);
+
+                    if(!userPrefs.getBoolean("SensorActivo",true)){
+                        try {
+                            REST.nuevaPeticion.post("http://communo3.dalfmos.upv.edu.es/api/usuarios/"+userPrefs.getString("nickname","")+"/sensor/activo", String.valueOf(new JSONObject().put("activo", true)), new PeticionarioREST.RespuestaREST() {
+                                @Override
+                                public void callback(int codigo, String cuerpo) {
+
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    SharedPreferences.Editor editarPreferencias = userPrefs.edit();
+
+                    editarPreferencias.putBoolean("SensorActivo", true);
+                    editarPreferencias.commit();
                     //ServicioNotificaciones.ultimoDatoEnviado=System.currentTimeMillis()/1000;
 
                     //solamente si el valor de la medicion ha cambiado hago POST al servidor para introducir una nueva medicion

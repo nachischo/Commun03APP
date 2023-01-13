@@ -1,5 +1,7 @@
 package com.imsangar.commun03app.services;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -20,7 +22,12 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.imsangar.commun03app.R;
+import com.imsangar.commun03app.RESTrequest.PeticionarioREST;
+import com.imsangar.commun03app.RESTrequest.REST;
 import com.imsangar.commun03app.beaconManagement.counters;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ServicioNotificaciones extends BroadcastReceiver {
     private static final String PREVIOUS_VALUE = "previous_value";
@@ -41,6 +48,13 @@ public class ServicioNotificaciones extends BroadcastReceiver {
         // Check if the value has not changed and the time since the last
         //check has exceeded the determined period
         if (currentValue == previousValue && System.currentTimeMillis() - lastCheckTime > CHECK_INTERVAL) {
+
+            SharedPreferences userPrefs = context.getSharedPreferences("shared_prefs",MODE_PRIVATE);
+            SharedPreferences.Editor editarPreferencias = userPrefs.edit();
+
+            editarPreferencias.putBoolean("SensorActivo", false);
+            editarPreferencias.commit();
+
             // Create a notification channel if running on API level 26 or higher
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 CharSequence name = "R.string.channel_name";
@@ -70,8 +84,21 @@ public class ServicioNotificaciones extends BroadcastReceiver {
                         .setLights(Color.BLUE, 3000, 3000)
                         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
             }
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-            notificationManager.notify(0, notification.build());
+            if(!userPrefs.getBoolean("SensorActivo", true)){
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                notificationManager.notify(0, notification.build());
+            }
+
+            try {
+                REST.nuevaPeticion.post("http://communo3.dalfmos.upv.edu.es/api/usuarios/"+userPrefs.getString("nickname","")+"/sensor/activo", String.valueOf(new JSONObject().put("activo", false)), new PeticionarioREST.RespuestaREST() {
+                            @Override
+                            public void callback(int codigo, String cuerpo) {
+
+                            }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             /*
             // Update the stored values for the next check
             prefs.edit()
@@ -93,73 +120,3 @@ public class ServicioNotificaciones extends BroadcastReceiver {
         return counters.anteriorValorMedicion;
     }
 }
-    /*public static Long ultimoDatoEnviado = null;
-    private static final int NOTIFICATION_ID = 1;
-    private static final String ACTION_START = "ACTION_START";
-    private static final String ACTION_DELETE = "ACTION_DELETE";
-
-    public ServicioNotificaciones() {
-        super(ServicioNotificaciones.class.getSimpleName());
-    }
-
-
-
-    public static Intent createIntentStartNotificationService(Context context) {
-        Intent intent = new Intent(context, ServicioNotificaciones.class);
-        intent.setAction(ACTION_START);
-        return intent;
-    }
-
-    public static Intent createIntentDeleteNotification(Context context) {
-        Intent intent = new Intent(context, ServicioNotificaciones.class);
-        intent.setAction(ACTION_DELETE);
-        return intent;
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d(getClass().getSimpleName(), "onHandleIntent, started handling a notification event");
-        try {
-            String action = intent.getAction();
-            if (ACTION_START.equals(action)) {
-                processStartNotification();
-            }
-            if (ACTION_DELETE.equals(action)) {
-                processDeleteNotification(intent);
-            }
-        } finally {
-            WakefulBroadcastReceiver.completeWakefulIntent(intent);
-        }
-    }
-
-
-    private void processDeleteNotification(Intent intent) {
-        // Log something?
-    }
-
-    private void processStartNotification() {
-        // Do something. For example, fetch fresh data from backend to create a rich notification?
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ns")
-                .setSmallIcon(R.drawable.nuevo_logo_sin_nombre)
-                .setContentTitle("CommunO3")
-                .setContentText("Parece que hay un error de conexión con el dispositivo de medición. Por favor comprueba que está encendido y cerca de tu smartphone.")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                NOTIFICATION_ID,
-                new Intent(this, MainActivity.class),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        builder.setDeleteIntent(NotificationEventReceiver.getDeleteIntent(this));
-
-        if((ultimoDatoEnviado-System.currentTimeMillis()/1000)>60){
-            HomeFragment.createNotificationChannel();
-            final NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.notify(NOTIFICATION_ID, builder.build());
-        }
-
-    }
-
-
-}*/
