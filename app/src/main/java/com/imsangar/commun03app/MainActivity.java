@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             //reposicionarlo en la nueva ubicación del usuario
             userLocationMarker.setPosition(userLocation);
             //actualizar los datos de la tarjeta
-            HomeFragment.actualizaTarjetaDatos();
+            HomeFragment HomeFragmentObject = new HomeFragment();
+            HomeFragmentObject.actualizaTarjetaDatos();
         }
     }
 
