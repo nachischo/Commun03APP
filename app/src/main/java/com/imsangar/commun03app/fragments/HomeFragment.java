@@ -342,7 +342,7 @@ public class HomeFragment extends Fragment {
             MainActivity.myMapController.setZoom(7.0);
             MainActivity.mapInitialized = false;
         } else {
-            MainActivity.myMapController.setZoom(19.0);
+            MainActivity.myMapController.setZoom(18.0);
         }
 
     }

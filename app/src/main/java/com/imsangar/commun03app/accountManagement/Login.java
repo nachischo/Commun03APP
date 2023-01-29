@@ -28,7 +28,7 @@ import org.json.JSONObject;
 public class Login {
 
     public Context context;
-    private String serverIP = "172.20.10.9";
+    private String serverIP = "172.20.10.3";
 
     //al instanciar la clase se almacena el contexto actual
     public Login(Context context){
@@ -41,7 +41,9 @@ public class Login {
         Log.d("nuevoPostLogin", "{ 'email': '"+emailUsuario+"', 'password': '"+passwordUsuario+"' }");
         try {
             //realizar una petición de tipo POST donde en el cuerpo aparecen el email y la contraseña del usuario
-            REST.nuevaPeticion.post("http://communo3.dalfmos.upv.edu.es/api/usuarios/login", String.valueOf(new JSONObject().put("email", emailUsuario).put("password", passwordUsuario)), new PeticionarioREST.RespuestaREST() {
+            //local dev: "http://"+serverIP+":3000/api/usuarios/login"
+            //remote server: "http://communo3.dalfmos.upv.edu.es/api/usuarios/login
+            REST.nuevaPeticion.post("http://"+serverIP+":3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", emailUsuario).put("password", passwordUsuario)), new PeticionarioREST.RespuestaREST() {
                 @Override
                 public void callback(int codigo, String cuerpo) {
                     //si el código de respuesta es 200 (OK)...
@@ -78,7 +80,9 @@ public class Login {
                         editarPreferencias.commit();
 
                         //realizar una petición de tipo get para conocer la información del sensor asociado al usuario
-                        REST.nuevaPeticion.get("http://communo3.dalfmos.upv.edu.es/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
+                        //local dev: "http://"+serverIP+":3000/api/usuarios/"
+                        //remote server: "http://communo3.dalfmos.upv.edu.es/api/usuarios/"
+                        REST.nuevaPeticion.get("http://"+serverIP+":3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
                             @Override
                             public void callback(int codigo, String cuerpo) {
                                 if(codigo == 200) {
