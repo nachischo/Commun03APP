@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.imsangar.commun03app.MainActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class REST {
     //-------------------------------------------------------------
@@ -57,23 +60,52 @@ public class REST {
             PeticionarioREST elPeticionario = new PeticionarioREST();
 
             //realizar una petición de tipo POST que incluya en el cuerpo el id del sensor, el valor de la medición y la ubicación en la que se ha tomado
-            elPeticionario.hacerPeticionREST("POST",  "https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/",
+            try {
+                elPeticionario.hacerPeticionREST("POST",  "https://communo3-backend.onrender.com/api/mediciones",
 
-                    "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': "+ MainActivity.userLocation.getLatitude() +", 'lon': "+MainActivity.userLocation.getLongitude()+"}",
-                    new PeticionarioREST.RespuestaREST () {
-                        @Override
-                        public void callback(int codigo, String cuerpo) {
-                            Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
+                        String.valueOf(new JSONObject().put("value", valorMedicion).put("lat", MainActivity.userLocation.getLatitude()).put("lng", MainActivity.userLocation.getLongitude()).put("instante", System.currentTimeMillis())),
 
+                        new PeticionarioREST.RespuestaREST () {
+                            @Override
+                            public void callback(int codigo, String cuerpo) {
+                                Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
+
+                            }
                         }
-                    }
-            );
+                );
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     //clase genérica para realizar peticiones http get o post
-    //, 'tiempo': '"+System.currentTimeMillis()/1000+"'
+    //, 'instante': '"+System.currentTimeMillis()+"'
 
+    public static void postSensorActivo(boolean estado, String nickname){
+        //si la ubicación actual del usuario ha sido encontrada...
+        if(MainActivity.userFound){
+            PeticionarioREST elPeticionario = new PeticionarioREST();
+
+            //realizar una petición de tipo POST que incluya en el cuerpo el id del sensor, el valor de la medición y la ubicación en la que se ha tomado
+            try {
+                elPeticionario.hacerPeticionREST("POST",  "https://communo3-backend.onrender.com/api/usuarios/"+nickname+"/sensor/activo",
+
+                        String.valueOf(new JSONObject().put("activo", estado)),
+
+                        new PeticionarioREST.RespuestaREST () {
+                            @Override
+                            public void callback(int codigo, String cuerpo) {
+                                Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
+
+                            }
+                        }
+                );
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
     //clase para simplificación de peticiones
     public static class nuevaPeticion{
 

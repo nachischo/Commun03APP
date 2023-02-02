@@ -185,16 +185,7 @@ public class BTLE {
                     SharedPreferences userPrefs = context.getSharedPreferences("shared_prefs",MODE_PRIVATE);
 
                     if(!userPrefs.getBoolean("SensorActivo",true)){
-                        try {
-                            REST.nuevaPeticion.post("http://communo3.dalfmos.upv.edu.es/api/usuarios/"+userPrefs.getString("nickname","")+"/sensor/activo", String.valueOf(new JSONObject().put("activo", true)), new PeticionarioREST.RespuestaREST() {
-                                @Override
-                                public void callback(int codigo, String cuerpo) {
-
-                                }
-                            });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        REST.postSensorActivo(true, userPrefs.getString("nickname",""));
                     }
 
                     SharedPreferences.Editor editarPreferencias = userPrefs.edit();

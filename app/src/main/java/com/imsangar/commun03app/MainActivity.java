@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -57,6 +58,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SharedPreferences userPrefs = getApplicationContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
+        SharedPreferences.Editor editarPreferencias = userPrefs.edit();
+
+        editarPreferencias.putBoolean("SensorActivo", false);
+        editarPreferencias.commit();
+
         //asignar un punto geográfico inicial donde centrar el mapa hasta tener la ubicación del usuario
         userLocation = new GeoPoint(40.46326501151092, -3.7142046644713127);
 
@@ -85,9 +92,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             final TilesOverlay tilesOverlay = new TilesOverlay(tileProvider, this.getBaseContext());
             tilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
 
-            //añadir la segunda capa con custom tiles de mapa de interpolación a partir de mediciones
+            //cargar la segunda capa con custom tiles de mapa de interpolación a partir de mediciones
             final MapTileProviderBasic anotherTileProvider = new MapTileProviderBasic(getApplicationContext());
-            final ITileSource anotherTileSource = new XYTileSource("MyTiles", 1, 18,  256, ".png",
+            final ITileSource customTileSource = new XYTileSource("MyTiles", 1, 18,  256, ".png",
                     new String[]{"https://raw.githubusercontent.com/nachischo/TileServer/master/MedicionesPruebaV1/"}){
                 @Override
                 public String getTileURLString(long pMapTileIndex) {
@@ -98,19 +105,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             + mImageFilenameEnding;
                 }
             };
-            anotherTileProvider.setTileSource(anotherTileSource);
+            anotherTileProvider.setTileSource(customTileSource);
             final TilesOverlay secondTilesOverlay = new TilesOverlay(anotherTileProvider, this.getBaseContext());
             secondTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
 
-// add the first tilesOverlay to the list
+            //añadir la primera capa de tiles con tiles de osm
             myOpenMapView.getOverlays().add(tilesOverlay);
 
-// add the second tilesOverlay to the list
+            //añadir la segunda capa con custom tiles de mapa de interpolación a partir de mediciones
             myOpenMapView.getOverlays().add(secondTilesOverlay);
-
-
-            //XYTileSource tileSource = new XYTileSource("MyTiles", 1, 18, 256, ".png", new String[]{"https://github.com/nachischo/TileServer/tree/master/MedicionesPruebaV1"});
-            //myOpenMapView.setTileSource(tileSource);
 
             //ampliar y animar el mapa hacia la ubicación del usuario
             myMapController.animateTo(userLocation, 19.0, 1500L);
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             userLocationMarker.setPosition(userLocation);
             //actualizar los datos de la tarjeta
             HomeFragment HomeFragmentObject = new HomeFragment();
-            HomeFragmentObject.actualizaTarjetaDatos();
+            HomeFragmentObject.actualizaTarjetaDatos(getApplicationContext());
         }
     }
 

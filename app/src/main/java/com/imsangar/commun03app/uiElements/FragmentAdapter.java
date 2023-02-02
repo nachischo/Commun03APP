@@ -112,4 +112,16 @@ public class FragmentAdapter {
                     .commit();
         }
     }
+
+    //función encargada de inicializar la ui de las opciones en la página principal
+    public static void inicializarFragmentUserProfile(FragmentActivity actividad, Bundle savedInstanceState) {
+        actividad.setContentView(R.layout.activity_principal);
+
+        if (savedInstanceState == null) {
+            actividad.getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragmentContainerView, OptionsFragment.class, null)
+                    .commit();
+        }
+    }
 }

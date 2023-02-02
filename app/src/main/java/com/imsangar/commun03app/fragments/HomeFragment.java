@@ -3,6 +3,8 @@ package com.imsangar.commun03app.fragments;
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
+import static androidx.core.view.ViewCompat.setBackgroundTintList;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -14,6 +16,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
@@ -37,6 +41,7 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.imsangar.commun03app.BuildConfig;
@@ -82,6 +87,8 @@ public class HomeFragment extends Fragment {
     static View MaxHoy = null;
     static View MinHoy = null;
     static View TempActual = null;
+
+    static View FabSensor = null;
 
 
     @Override
@@ -323,6 +330,7 @@ public class HomeFragment extends Fragment {
         MaxHoy = binding.MaximaDeHoy;
         MinHoy = binding.MinimaDeHoy;
         TempActual = binding.Temp;
+        FabSensor = binding.fabSensor;
 
 
         return root;
@@ -345,12 +353,24 @@ public class HomeFragment extends Fragment {
             MainActivity.myMapController.setZoom(18.0);
         }
 
+
     }
 
+
     //función para actualizar los datos de la tarjeta
-    public void actualizaTarjetaDatos() {
+    public void actualizaTarjetaDatos(Context context) {
 
+        SharedPreferences userPrefs = context.getSharedPreferences("shared_prefs",MODE_PRIVATE);
 
+        if(!userPrefs.getBoolean("SensorActivo",true)){
+            ColorStateList colorStateList1 = ColorStateList.valueOf(Color.parseColor("#ffff4444"));
+            FabSensor.setBackgroundTintList(colorStateList1);
+        }
+        else{
+            ColorStateList colorStateList2 = ColorStateList.valueOf(Color.parseColor("#FF018786"));
+            FabSensor.setBackgroundTintList(colorStateList2);
+        }
+/*
         REST.nuevaPeticion.get("https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/api.php?queQuieres=Ultimo&tipo=1", new PeticionarioREST.RespuestaREST() {
                     @Override
                     public void callback(int codigo, String cuerpo) {
@@ -367,7 +387,7 @@ public class HomeFragment extends Fragment {
                         try {
                             ((TextView) ValorActual).setText(String.valueOf(cuerpoJSON.getDouble("Valor"))+" ppm/m3");
 
-                            /*
+
                             View tarjeta = ((MainActivity)getActivity()).findViewById(R.id.tarjetaInfoSuperiorLayout);
                             if(cuerpoJSON.getDouble("Valor")<1){
                                 tarjeta.setBackgroundResource(R.drawable.tarjeta_info_superior);
@@ -379,7 +399,7 @@ public class HomeFragment extends Fragment {
                                 tarjeta.setBackgroundResource(R.drawable.tarjeta_info_superior_rojo);
                             }
 
-                             */
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -463,6 +483,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
         );
+        */
     }
 
 

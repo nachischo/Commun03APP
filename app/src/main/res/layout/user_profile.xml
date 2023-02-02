@@ -10,8 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Datos de usuario"
-        tools:layout_editor_absoluteX="91dp"
-        tools:layout_editor_absoluteY="98dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/NameTxt"
@@ -46,7 +47,7 @@
         tools:layout_editor_absoluteY="313dp" />
 
     <TextView
-        android:id="@+id/SensorTxt"
+        android:id="@+id/AytoTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sensor asociado:"
@@ -54,7 +55,7 @@
         tools:layout_editor_absoluteY="386dp" />
 
     <TextView
-        android:id="@+id/SensorField"
+        android:id="@+id/AytoField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"

@@ -42,8 +42,8 @@ public class Login {
         try {
             //realizar una petición de tipo POST donde en el cuerpo aparecen el email y la contraseña del usuario
             //local dev: "http://"+serverIP+":3000/api/usuarios/login"
-            //remote server: "http://communo3.dalfmos.upv.edu.es/api/usuarios/login
-            REST.nuevaPeticion.post("http://"+serverIP+":3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", emailUsuario).put("password", passwordUsuario)), new PeticionarioREST.RespuestaREST() {
+            //remote server: "http://communo3.dalfmos.upv.edu.es/api/usuarios/login"
+            REST.nuevaPeticion.post("https://communo3-backend.onrender.com/api/usuarios/login", String.valueOf(new JSONObject().put("email", emailUsuario).put("password", passwordUsuario)), new PeticionarioREST.RespuestaREST() {
                 @Override
                 public void callback(int codigo, String cuerpo) {
                     //si el código de respuesta es 200 (OK)...
@@ -82,7 +82,7 @@ public class Login {
                         //realizar una petición de tipo get para conocer la información del sensor asociado al usuario
                         //local dev: "http://"+serverIP+":3000/api/usuarios/"
                         //remote server: "http://communo3.dalfmos.upv.edu.es/api/usuarios/"
-                        REST.nuevaPeticion.get("http://"+serverIP+":3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
+                        REST.nuevaPeticion.get("https://communo3-backend.onrender.com/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
                             @Override
                             public void callback(int codigo, String cuerpo) {
                                 if(codigo == 200) {

@@ -87,17 +87,11 @@ public class ServicioNotificaciones extends BroadcastReceiver {
             if(!userPrefs.getBoolean("SensorActivo", true)){
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
                 notificationManager.notify(0, notification.build());
+                REST.postSensorActivo(false, userPrefs.getString("nickname",""));
             }
 
-            try {
-                REST.nuevaPeticion.post("http://communo3.dalfmos.upv.edu.es/api/usuarios/"+userPrefs.getString("nickname","")+"/sensor/activo", String.valueOf(new JSONObject().put("activo", false)), new PeticionarioREST.RespuestaREST() {
-                            @Override
-                            public void callback(int codigo, String cuerpo) {
-
-                            }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
+            else {
+                REST.postSensorActivo(true, userPrefs.getString("nickname",""));
             }
             /*
             // Update the stored values for the next check
