@@ -1,5 +1,7 @@
 package com.imsangar.commun03app.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -78,6 +80,8 @@ public class OptionsFragment extends Fragment {
         */
 
         binding.CerrarSesionButton.setOnClickListener(view -> {
+            SharedPreferences userPrefs = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
+            REST.postSensorActivo(false, userPrefs.getString("nickname",""));
             SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
             editarPreferencias.clear();
             editarPreferencias.commit();
