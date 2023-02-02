@@ -115,7 +115,7 @@ public class HomeFragment extends Fragment {
             //alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60000, pendingIntent);
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 360000, 360000, pendingIntent);
         }
-        Log.d("servicionotificaciones", String.valueOf(alarmManager.getNextAlarmClock().getTriggerTime()));
+        //Log.d("servicionotificaciones", String.valueOf(alarmManager.getNextAlarmClock().getTriggerTime()));
         //---------------------------------------------------------------------------------------------------------------
         //-----------------------------fin arrancar servicio notificaciones----------------------------------------------
         //---------------------------------------------------------------------------------------------------------------
