@@ -53,6 +53,16 @@ public class OptionsFragment extends Fragment {
             MainActivity.mapInitialized = false;
         });
 
+        binding.UserProfileButton.setOnClickListener(view -> {
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+            Bundle datosUser = new Bundle();
+            datosUser.putString("nombre", (sharedPreferences.getString("nickname", "Se ha producido un error...")));
+            datosUser.putString("email", (sharedPreferences.getString("email", "Se ha producido un error...")));
+            datosUser.putString("ayto", (String.valueOf(sharedPreferences.getInt("ayuntamiento_id", 0))));
+            datosUser.putString("uuid", (sharedPreferences.getString("uuid", "Se ha producido un error...")));
+            FragmentAdapter.inicializarFragmentUserProfile(((MainActivity)getActivity()), savedInstanceState, datosUser);
+        });
+
         binding.DevMenuButton.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), DevActivity.class );
             startActivity(intent);

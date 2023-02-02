@@ -1,5 +1,7 @@
 package com.imsangar.commun03app.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,7 +35,15 @@ public class UserProfileFragment extends Fragment {
         binding = UserProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.CloseProfileButton.setOnClickListener(view -> {
+            FragmentAdapter.inicializarFragmentHome(((MainActivity)getActivity()), savedInstanceState);
+            MainActivity.mapInitialized = false;
+        });
 
+        binding.nombreField.setText(requireArguments().getString("nombre"));
+        binding.emailField.setText(requireArguments().getString("email"));
+        binding.AytoField.setText(requireArguments().getString("ayto"));
+        binding.SensorField.setText(requireArguments().getString("uuid"));
 
         return root;
     }

@@ -13,6 +13,7 @@ import com.imsangar.commun03app.fragments.LoginActivityFragment;
 import com.imsangar.commun03app.fragments.LoginLoadingFragment;
 import com.imsangar.commun03app.fragments.NoSensorAssociatedFragment;
 import com.imsangar.commun03app.fragments.OptionsFragment;
+import com.imsangar.commun03app.fragments.UserProfileFragment;
 
 public class FragmentAdapter {
 
@@ -114,13 +115,13 @@ public class FragmentAdapter {
     }
 
     //función encargada de inicializar la ui de las opciones en la página principal
-    public static void inicializarFragmentUserProfile(FragmentActivity actividad, Bundle savedInstanceState) {
+    public static void inicializarFragmentUserProfile(FragmentActivity actividad, Bundle savedInstanceState, Bundle datosUser) {
         actividad.setContentView(R.layout.activity_principal);
 
         if (savedInstanceState == null) {
             actividad.getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fragmentContainerView, OptionsFragment.class, null)
+                    .add(R.id.fragmentContainerView, UserProfileFragment.class, datosUser)
                     .commit();
         }
     }
