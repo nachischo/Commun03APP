@@ -388,7 +388,7 @@ public class HomeFragment extends Fragment {
                 ColorStateList colorStateList4 = ColorStateList.valueOf(Color.parseColor("#B76C34"));
                 tarjetaInfoSuperiorLayout.setBackgroundTintList(colorStateList4);
                 CalidadDelAireEstim.setText("CONCENTRACIÓN MODERADA DE O3 EN LA ZONA");
-                MediaEnLaZonaText.setText("Las lecturas de tu dispositivo muestran una concentración de ozono algo más alta de lo habitual. Es algo normal en entornos algo más contaminados como la ciudad.");
+                MediaEnLaZonaText.setText("Las lecturas de tu dispositivo muestran una concentración de ozono un poco más alta de lo habitual. Es normal en entornos algo más contaminados como la ciudad.");
             } else if (counters.anteriorValorMedicion >= 2.5) {
                 ColorStateList colorStateList5 = ColorStateList.valueOf(Color.parseColor("#94232E"));
                 tarjetaInfoSuperiorLayout.setBackgroundTintList(colorStateList5);
