@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/CloseProfileButton"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cross_icon" />
+
+    <TextView
+        android:id="@+id/TitleTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:text="Datos del usuario"
+        android:textColor="#1a659e"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toTopOf="@+id/cajans"
+        app:layout_constraintEnd_toEndOf="@+id/TitleTxt"
+        app:layout_constraintStart_toStartOf="@+id/TitleTxt"
+        app:layout_constraintTop_toBottomOf="@+id/TitleTxt">
+
+        <TextView
+            android:id="@+id/NameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="150dp"
+            android:text="Nombre:"
+            android:textColor="#1a659e"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/correoTxt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.506"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/nombreField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#1a659e"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/NameTxt"
+            app:layout_constraintEnd_toEndOf="@+id/emailField"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/emailField"
+            app:layout_constraintTop_toTopOf="@+id/NameTxt" />
+
+        <TextView
+            android:id="@+id/correoTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="E-mail:"
+            android:textColor="#1a659e"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/AytoTxt"
+            app:layout_constraintEnd_toEndOf="@+id/NameTxt"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/NameTxt"
+            app:layout_constraintTop_toBottomOf="@+id/NameTxt" />
+
+        <TextView
+            android:id="@+id/emailField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#1a659e"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/AytoField"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/AytoField"
+            app:layout_constraintTop_toTopOf="@+id/correoTxt" />
+
+        <TextView
+            android:id="@+id/AytoTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ayuntamiento asociado:"
+            android:textColor="#1a659e"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/correoTxt"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/correoTxt"
+            app:layout_constraintTop_toBottomOf="@+id/correoTxt" />
+
+        <TextView
+            android:id="@+id/AytoField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#1a659e"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/AytoTxt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/AytoTxt"
+            app:layout_constraintTop_toTopOf="@+id/AytoTxt" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cajans"
+        android:layout_width="wrap_content"
+        android:layout_height="132dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <TextView
+            android:id="@+id/SensorTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sensor asociado:"
+            android:textColor="#1a659e"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/SensorField"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/SensorField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#1a659e"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/SensorTxt"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/SensorTxt"
+            app:layout_constraintTop_toBottomOf="@+id/SensorTxt" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

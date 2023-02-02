@@ -1,5 +1,7 @@
 package com.imsangar.commun03app.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,6 +43,9 @@ public class OptionsFragment extends Fragment {
         binding = OptionsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+
+
         binding.CloseOptionsButton.setAlpha(0f);
         binding.CloseOptionsButton.setVisibility(View.VISIBLE);
         binding.CloseOptionsButton.animate()
@@ -53,13 +58,30 @@ public class OptionsFragment extends Fragment {
             MainActivity.mapInitialized = false;
         });
 
-        binding.DevMenuButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getContext(), DevActivity.class );
-            startActivity(intent);
+        binding.UserProfileButton.setOnClickListener(view -> {
+            Bundle datosUser = new Bundle();
+            datosUser.putString("nombre", (sharedPreferences.getString("nickname", "Se ha producido un error...")));
+            datosUser.putString("email", (sharedPreferences.getString("email", "Se ha producido un error...")));
+            datosUser.putString("ayto", (String.valueOf(sharedPreferences.getInt("ayuntamiento_id", 0))));
+            datosUser.putString("uuid", (sharedPreferences.getString("uuid", "Se ha producido un error...")));
+            FragmentAdapter.inicializarFragmentUserProfile(((MainActivity)getActivity()), savedInstanceState, datosUser);
         });
 
+        /*
+        binding.DevMenuButton.setVisibility(View.INVISIBLE);
+
+        if(!sharedPreferences.getString("rol", "USER").equals("DEV")){
+            binding.DevMenuButton.setVisibility(View.VISIBLE);
+            binding.DevMenuButton.setOnClickListener(view -> {
+                Intent intent = new Intent(getContext(), DevActivity.class );
+                startActivity(intent);
+            });
+        }
+        */
+
         binding.CerrarSesionButton.setOnClickListener(view -> {
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+            SharedPreferences userPrefs = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
+            REST.postSensorActivo(false, userPrefs.getString("nickname",""));
             SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
             editarPreferencias.clear();
             editarPreferencias.commit();

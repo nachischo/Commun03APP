@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.XmlRes;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.imsangar.commun03app.LoginActivity;
@@ -21,6 +24,7 @@ import com.imsangar.commun03app.MainActivity;
 import com.imsangar.commun03app.R;
 import com.imsangar.commun03app.RESTrequest.PeticionarioREST;
 import com.imsangar.commun03app.RESTrequest.REST;
+import com.imsangar.commun03app.accountManagement.Login;
 import com.imsangar.commun03app.databinding.LoadingScreenBinding;
 import com.imsangar.commun03app.uiElements.FragmentAdapter;
 
@@ -33,7 +37,6 @@ public class LoginLoadingFragment extends Fragment {
     private int animationDuration = 500; // 0.5 Seconds
     private int intervalBetweenAnimations = 500; // 0.5 Seconds
     private Handler handler = new Handler();
-    private Runnable runnable = null;
     private Runnable deNadaa0 = null;
     private Runnable de0a1 = null;
     private Runnable de1a2 = null;
@@ -43,11 +46,13 @@ public class LoginLoadingFragment extends Fragment {
     Fragment f = null;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //------------------------------------------------------------------------------------------
+        //-----------------------------------animación de carga-------------------------------------
+        //------------------------------------------------------------------------------------------
         vuelveAempezar = new Runnable() {
             @Override
             public void run() {
@@ -149,107 +154,22 @@ public class LoginLoadingFragment extends Fragment {
         fm = getParentFragmentManager();
         f = fm.findFragmentById(R.id.fragmentContainerView);
 
-        Log.d("Loading", "llego a loadingFragment ");
-
-         runnable = new Runnable(){
-            public void run() {
-                Log.d("Loading", "llego a lm.popBackStack() ");
-                fm.popBackStack();
-            }
-        };
 
         handler.postAtTime(deNadaa0, System.currentTimeMillis()+intervalBetweenAnimations);
         handler.postDelayed(deNadaa0, intervalBetweenAnimations);
+        //------------------------------------------------------------------------------------------
+        //-------------------------------fin animación de carga-------------------------------------
+        //------------------------------------------------------------------------------------------
 
+        //instanciar la clase Login
+        Login LoginObject = new Login(getContext());
+        //llamar a la función encargada de iniciar sesión
+        LoginObject.iniciaSesion(((LoginActivity)getActivity()), getContext(), savedInstanceState, requireArguments().getString("email"), requireArguments().getString("password"));
 
         //bypass login for dev purposes
         //Intent intent = new Intent(getContext(), MainActivity.class );
         //startActivity(intent);
 
-        Log.d("nuevoPostLogin", "{ 'email': '"+requireArguments().getString("email")+"', 'password': '"+requireArguments().getString("password")+"' }");
-        try {
-            REST.nuevaPeticion.post("http://172.20.10.2:3000/api/usuarios/login", String.valueOf(new JSONObject().put("email", requireArguments().getString("email")).put("password", requireArguments().getString("password"))), new PeticionarioREST.RespuestaREST() {
-                @Override
-                public void callback(int codigo, String cuerpo) {
-                    if(codigo == 200){
-                        Log.d( "nuevoPostLogin", "codigo = " + codigo+" cuerpo = "+cuerpo );
-
-                        JSONObject cuerpoJSON = null;
-                        try {
-                            cuerpoJSON = new JSONObject(cuerpo);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
-                        SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
-
-                        editarPreferencias.putString("email", requireArguments().getString("email"));
-                        editarPreferencias.putString("password", requireArguments().getString("password"));
-                        try {
-                            editarPreferencias.putString("nickname", cuerpoJSON.getString("nickname"));
-                            editarPreferencias.putString("profile_photo_url", cuerpoJSON.getString("profile_photo_url"));
-                            editarPreferencias.putString("rol", cuerpoJSON.getString("rol"));
-                            editarPreferencias.putString("token", cuerpoJSON.getString("token"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        editarPreferencias.commit();
-
-                        REST.nuevaPeticion.get("http://172.20.10.2:3000/api/usuarios/"+sharedPreferences.getString("nickname","")+"/sensor", new PeticionarioREST.RespuestaREST() {
-                            @Override
-                            public void callback(int codigo, String cuerpo) {
-                                if(codigo == 200) {
-                                    JSONObject cuerpoJSON = null;
-                                    try {
-                                        cuerpoJSON = new JSONObject(cuerpo);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
-                                    SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
-                                    try {
-                                        editarPreferencias.putString("uuid", cuerpoJSON.getString("uuid"));
-                                        editarPreferencias.putFloat("uuid", (float)cuerpoJSON.getDouble("valorCariblracion"));
-                                        editarPreferencias.putInt("ayuntamiento_id", cuerpoJSON.getInt("ayuntamiento_id"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    editarPreferencias.commit();
-
-                                    Intent intent = new Intent(getContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    ((LoginActivity) getActivity()).finish();
-                                }
-                                else{
-                                    Log.d( "nuevoPostLogin fallido", "codigo de error = " + codigo );
-                                    Bundle bundleReqRes = new Bundle();
-                                    bundleReqRes.putInt("responseCode" , codigo);
-                                    bundleReqRes.putString("responseBody" , cuerpo);
-                                    FragmentAdapter.volverAFragmentLogin(((LoginActivity)getActivity()), savedInstanceState, bundleReqRes);
-
-                                }
-                            }
-
-                        });
-
-                    }
-                    else{
-                        Log.d( "nuevoPostLogin fallido", "codigo de error = " + codigo );
-                        Bundle bundleReqRes = new Bundle();
-                        bundleReqRes.putInt("responseCode" , codigo);
-                        bundleReqRes.putString("responseBody" , cuerpo);
-                        FragmentAdapter.volverAFragmentLogin(((LoginActivity)getActivity()), savedInstanceState, bundleReqRes);
-
-                    }
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
     }
     @Override
@@ -263,5 +183,15 @@ public class LoginLoadingFragment extends Fragment {
         return root;
     }
 
+    //función encargada de gestionar un error al iniciar sesión
+    public void errorEnInicioDeSesion(FragmentActivity actividad, Bundle savedInstanceState, int codigo, String cuerpo){
+        Log.d( "nuevoPostLogin fallido", "codigo de error = " + codigo );
+        //crear un paquete con información sobre el error ocurrido
+        Bundle bundleReqRes = new Bundle();
+        bundleReqRes.putInt("responseCode" , codigo);
+        bundleReqRes.putString("responseBody" , cuerpo);
+        //inicializar nuevamente el fragment de inicio de sesión
+        FragmentAdapter.volverAFragmentLogin(actividad, savedInstanceState, bundleReqRes);
+    }
 
 }
