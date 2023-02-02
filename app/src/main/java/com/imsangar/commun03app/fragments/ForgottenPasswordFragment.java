@@ -45,7 +45,7 @@ public class ForgottenPasswordFragment extends Fragment {
             View emailUsuario = ((com.imsangar.commun03app.LoginActivity)getActivity()).findViewById(R.id.emailInput);
             //realizar una petición de tipo PUT para iniciar el proceso de recuperación de contraseña poniendo el email en el cuerpo
             try {
-                REST.nuevaPeticion.put("http://communo3.dalfmos.upv.edu.es/api/usuarios/resetPassword",String.valueOf(new JSONObject().put("email", ((TextView)emailUsuario).getText().toString() )), new PeticionarioREST.RespuestaREST() {
+                REST.nuevaPeticion.put("https://communo3-backend.onrender.com/api/usuarios/resetPassword",String.valueOf(new JSONObject().put("email", ((TextView)emailUsuario).getText().toString() )), new PeticionarioREST.RespuestaREST() {
                             @Override
                             public void callback(int codigo, String cuerpo) {
                                 //una vez recibida la respuesta del servidor crear un paquete con los datos de la operación

@@ -51,6 +51,7 @@ import com.imsangar.commun03app.R;
 import com.imsangar.commun03app.RESTrequest.PeticionarioREST;
 import com.imsangar.commun03app.RESTrequest.REST;
 import com.imsangar.commun03app.beaconManagement.BTLE;
+import com.imsangar.commun03app.beaconManagement.counters;
 import com.imsangar.commun03app.databinding.ActivityMapaBinding;
 import com.imsangar.commun03app.databinding.HomeBinding;
 import com.imsangar.commun03app.services.ServicioNotificaciones;
@@ -89,6 +90,9 @@ public class HomeFragment extends Fragment {
     static View TempActual = null;
 
     static View FabSensor = null;
+    static View tarjetaInfoSuperiorLayout = null;
+    static TextView CalidadDelAireEstim = null;
+    static TextView MediaEnLaZonaText = null;
 
 
     @Override
@@ -326,6 +330,9 @@ public class HomeFragment extends Fragment {
         });
 
         FabSensor = binding.fabSensor;
+        tarjetaInfoSuperiorLayout = binding.tarjetaInfoSuperiorLayout;
+        CalidadDelAireEstim = binding.CalidadDelAireEstim;
+        MediaEnLaZonaText = binding.MediaEnLaZonaText;
 
 
         return root;
@@ -360,125 +367,33 @@ public class HomeFragment extends Fragment {
         if(!userPrefs.getBoolean("SensorActivo",true)){
             ColorStateList colorStateList1 = ColorStateList.valueOf(Color.parseColor("#ffff4444"));
             FabSensor.setBackgroundTintList(colorStateList1);
+
+            CalidadDelAireEstim.setText("BUSCANDO DISPOSITIVO...");
+            MediaEnLaZonaText.setText("Estableciendo conexión con tu dispositivo CommunO3. Asegurate de que está encendido y cerca de tu smartphone. Esto puede tardar unos minutos.");
+
         }
         else{
             ColorStateList colorStateList2 = ColorStateList.valueOf(Color.parseColor("#FF018786"));
             FabSensor.setBackgroundTintList(colorStateList2);
+
+            if (counters.anteriorValorMedicion < 1) {
+                ColorStateList colorStateList3 = ColorStateList.valueOf(Color.parseColor("#1A659E"));
+                tarjetaInfoSuperiorLayout.setBackgroundTintList(colorStateList3);
+                CalidadDelAireEstim.setText("BAJA CONCENTRACIÓN DE O3 EN LA ZONA");
+                MediaEnLaZonaText.setText("Las lecturas de tu dispositivo muestran una concentración de ozono dentro de los parámetros saludables.");
+            } else if (counters.anteriorValorMedicion >= 1 && counters.anteriorValorMedicion < 2.5) {
+                ColorStateList colorStateList4 = ColorStateList.valueOf(Color.parseColor("#B76C34"));
+                tarjetaInfoSuperiorLayout.setBackgroundTintList(colorStateList4);
+                CalidadDelAireEstim.setText("CONCENTRACIÓN MODERADA DE O3 EN LA ZONA");
+                MediaEnLaZonaText.setText("Las lecturas de tu dispositivo muestran una concentración de ozono algo más alta de lo habitual. Es algo normal en entornos algo más contaminados como la ciudad.");
+            } else if (counters.anteriorValorMedicion >= 2.5) {
+                ColorStateList colorStateList5 = ColorStateList.valueOf(Color.parseColor("#94232E"));
+                tarjetaInfoSuperiorLayout.setBackgroundTintList(colorStateList5);
+                CalidadDelAireEstim.setText("ALTA CONCENTRACIÓN DE O3 EN LA ZONA");
+                MediaEnLaZonaText.setText("Las lecturas de tu dispositivo muestran una concentración de ozono muy alta. Tu salud podría estar en riesgo.");
+            }
         }
-/*
-        REST.nuevaPeticion.get("https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/api.php?queQuieres=Ultimo&tipo=1", new PeticionarioREST.RespuestaREST() {
-                    @Override
-                    public void callback(int codigo, String cuerpo) {
-                        JSONObject cuerpoJSON = null;
-                        JSONArray arrayCuerpo = null;
 
-                        try {
-                            arrayCuerpo = new JSONArray(cuerpo);
-                            cuerpoJSON = arrayCuerpo.getJSONObject(0);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        try {
-                            ((TextView) ValorActual).setText(String.valueOf(cuerpoJSON.getDouble("Valor"))+" ppm/m3");
-
-
-                            View tarjeta = ((MainActivity)getActivity()).findViewById(R.id.tarjetaInfoSuperiorLayout);
-                            if(cuerpoJSON.getDouble("Valor")<1){
-                                tarjeta.setBackgroundResource(R.drawable.tarjeta_info_superior);
-                            }
-                            else if(cuerpoJSON.getDouble("Valor")>1){
-                                tarjeta.setBackgroundResource(R.drawable.tarjeta_info_superior_naranja);
-                            }
-                            else{
-                                tarjeta.setBackgroundResource(R.drawable.tarjeta_info_superior_rojo);
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
-        );
-        REST.nuevaPeticion.get("https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/api.php?queQuieres=Mayor&tipo=1", new PeticionarioREST.RespuestaREST() {
-                    @Override
-                    public void callback(int codigo, String cuerpo) {
-                        JSONObject cuerpoJSON = null;
-                        JSONArray arrayCuerpo = null;
-
-                        try {
-                            arrayCuerpo = new JSONArray(cuerpo);
-                            cuerpoJSON = arrayCuerpo.getJSONObject(0);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        try {
-                            ((TextView) MaxHoy).setText(String.valueOf(cuerpoJSON.getDouble("Valor"))+" ppm/m3");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
-        );
-        REST.nuevaPeticion.get("https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/api.php?queQuieres=Menor&tipo=1", new PeticionarioREST.RespuestaREST() {
-                    @Override
-                    public void callback(int codigo, String cuerpo) {
-                        JSONObject cuerpoJSON = null;
-                        JSONArray arrayCuerpo = null;
-
-                        try {
-                            arrayCuerpo = new JSONArray(cuerpo);
-                            cuerpoJSON = arrayCuerpo.getJSONObject(0);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        try {
-                            ((TextView) MinHoy).setText(String.valueOf(Math.round((cuerpoJSON.getDouble("Valor")*100)/100))+" ppm/m3");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
-        );
-        REST.nuevaPeticion.get("https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/api.php?queQuieres=Media&tipo=1", new PeticionarioREST.RespuestaREST() {
-                    @Override
-                    public void callback(int codigo, String cuerpo) {
-
-
-                            ((TextView) MediaHoy).setText(String.valueOf(Math.round((Double.parseDouble(cuerpo)*100)/100))+" ppm/m3");
-
-                    }
-                }
-        );
-        REST.nuevaPeticion.get("https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/api.php?queQuieres=Ultimo&tipo=2", new PeticionarioREST.RespuestaREST() {
-                    @Override
-                    public void callback(int codigo, String cuerpo) {
-                        JSONObject cuerpoJSON = null;
-                        JSONArray arrayCuerpo = null;
-
-                        try {
-                            arrayCuerpo = new JSONArray(cuerpo);
-                            cuerpoJSON = arrayCuerpo.getJSONObject(0);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        try {
-                            ((TextView) TempActual).setText(String.valueOf(cuerpoJSON.getDouble("Valor"))+" ºC");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
-        );
-        */
     }
 
 

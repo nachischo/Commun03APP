@@ -24,26 +24,12 @@
         android:text="Datos del usuario"
         android:textColor="#1a659e"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/DevMenuButton"
+        app:layout_constraintBottom_toTopOf="@+id/CerrarSesionButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
-
-    <TextView
-        android:id="@+id/DevMenuButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:text="DevMenu"
-        android:textColor="#1a659e"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/CerrarSesionButton"
-        app:layout_constraintEnd_toEndOf="@+id/UserProfileButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/UserProfileButton"
-        app:layout_constraintTop_toBottomOf="@+id/UserProfileButton" />
 
     <TextView
         android:id="@+id/CerrarSesionButton"
@@ -53,8 +39,9 @@
         android:textColor="#F44336"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/DevMenuButton"
+        app:layout_constraintEnd_toEndOf="@+id/UserProfileButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/DevMenuButton"
-        app:layout_constraintTop_toBottomOf="@+id/DevMenuButton" />
+        app:layout_constraintStart_toStartOf="@+id/UserProfileButton"
+        app:layout_constraintTop_toBottomOf="@+id/UserProfileButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

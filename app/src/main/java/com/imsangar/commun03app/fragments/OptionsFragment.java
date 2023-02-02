@@ -41,6 +41,9 @@ public class OptionsFragment extends Fragment {
         binding = OptionsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+
+
         binding.CloseOptionsButton.setAlpha(0f);
         binding.CloseOptionsButton.setVisibility(View.VISIBLE);
         binding.CloseOptionsButton.animate()
@@ -54,7 +57,6 @@ public class OptionsFragment extends Fragment {
         });
 
         binding.UserProfileButton.setOnClickListener(view -> {
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
             Bundle datosUser = new Bundle();
             datosUser.putString("nombre", (sharedPreferences.getString("nickname", "Se ha producido un error...")));
             datosUser.putString("email", (sharedPreferences.getString("email", "Se ha producido un error...")));
@@ -63,13 +65,19 @@ public class OptionsFragment extends Fragment {
             FragmentAdapter.inicializarFragmentUserProfile(((MainActivity)getActivity()), savedInstanceState, datosUser);
         });
 
-        binding.DevMenuButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getContext(), DevActivity.class );
-            startActivity(intent);
-        });
+        /*
+        binding.DevMenuButton.setVisibility(View.INVISIBLE);
+
+        if(!sharedPreferences.getString("rol", "USER").equals("DEV")){
+            binding.DevMenuButton.setVisibility(View.VISIBLE);
+            binding.DevMenuButton.setOnClickListener(view -> {
+                Intent intent = new Intent(getContext(), DevActivity.class );
+                startActivity(intent);
+            });
+        }
+        */
 
         binding.CerrarSesionButton.setOnClickListener(view -> {
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editarPreferencias = sharedPreferences.edit();
             editarPreferencias.clear();
             editarPreferencias.commit();

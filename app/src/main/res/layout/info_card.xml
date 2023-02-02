@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="114dp"
             android:background="@drawable/tarjeta_info_superior"
+            android:backgroundTint="@color/teal_700"
             android:clipToOutline="true"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
