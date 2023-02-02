@@ -109,7 +109,7 @@ public class HomeFragment extends Fragment {
         //alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, System.currentTimeMillis()+0, pendingIntent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60000, pendingIntent);
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 360000, 1800000, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 360000, 360000, pendingIntent);
         }
         Log.d("servicionotificaciones", String.valueOf(alarmManager.getNextAlarmClock().getTriggerTime()));
         //---------------------------------------------------------------------------------------------------------------
@@ -325,11 +325,6 @@ public class HomeFragment extends Fragment {
             MainActivity.myMapController.animateTo(MainActivity.userLocation, 19.0, 1500L);
         });
 
-        ValorActual = binding.NivelConcentracion;
-        MediaHoy = binding.MediaDeHoy;
-        MaxHoy = binding.MaximaDeHoy;
-        MinHoy = binding.MinimaDeHoy;
-        TempActual = binding.Temp;
         FabSensor = binding.fabSensor;
 
 

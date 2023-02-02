@@ -214,7 +214,7 @@ public class BTLE {
                         counters.anteriorValorTemperatura = counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor()));
                         TabCalibration.cambiaValorTemperatura(counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
 
-                        REST.altaNuevaMedicion(Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
+                        //REST.altaNuevaMedicion(Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
                         counters.anyadeUnoABeaconCounter();
                         counters.cambiaValorMedicion(counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
                     }

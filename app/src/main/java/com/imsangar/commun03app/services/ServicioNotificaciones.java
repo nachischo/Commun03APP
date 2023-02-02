@@ -29,10 +29,12 @@ import com.imsangar.commun03app.beaconManagement.counters;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+
 public class ServicioNotificaciones extends BroadcastReceiver {
     private static final String PREVIOUS_VALUE = "previous_value";
     private static final String LAST_CHECK_TIME = "last_check_time";
-    private static final long CHECK_INTERVAL = 1800000;//AlarmManager.INTERVAL_HOUR; // 1 hour
+    private static final long CHECK_INTERVAL = 360000;//1min//1800000;//30 min//AlarmManager.INTERVAL_HOUR; // 1 hour
     private static final String CHANNEL_ID = "variable_change_notification_channel";
 
     @Override
@@ -44,16 +46,21 @@ public class ServicioNotificaciones extends BroadcastReceiver {
 
         // Get the current value of the variable
         double currentValue = getCurrentValue();
+        final DecimalFormat df = new DecimalFormat("0.00");
+
+        Log.d("servicionotificaciones", "anterior valor para comparación: "+df.format(previousValue));
 
         // Check if the value has not changed and the time since the last
         //check has exceeded the determined period
-        if (currentValue == previousValue && System.currentTimeMillis() - lastCheckTime > CHECK_INTERVAL) {
+        if (df.format(currentValue).equals(df.format(previousValue)) && System.currentTimeMillis() - lastCheckTime > CHECK_INTERVAL) {
 
             SharedPreferences userPrefs = context.getSharedPreferences("shared_prefs",MODE_PRIVATE);
             SharedPreferences.Editor editarPreferencias = userPrefs.edit();
 
             editarPreferencias.putBoolean("SensorActivo", false);
             editarPreferencias.commit();
+
+            Log.d("servicionotificaciones", String.valueOf(userPrefs.getBoolean("SensorActivo", true)));
 
             // Create a notification channel if running on API level 26 or higher
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -110,7 +117,8 @@ public class ServicioNotificaciones extends BroadcastReceiver {
 
             private double getCurrentValue() {
         // Replace this with code to retrieve the current value of the variable
-        Log.d("ServicioNotificaciones", "getCurrentValue: "+counters.anteriorValorMedicion);
-        return counters.anteriorValorMedicion;
-    }
+                final DecimalFormat df = new DecimalFormat("0.00");
+                Log.d("ServicioNotificaciones", "getCurrentValue: "+df.format(counters.anteriorValorMedicion));
+                return counters.anteriorValorMedicion;
+            }
 }
