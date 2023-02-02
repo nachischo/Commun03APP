@@ -368,6 +368,9 @@ public class HomeFragment extends Fragment {
             ColorStateList colorStateList1 = ColorStateList.valueOf(Color.parseColor("#ffff4444"));
             FabSensor.setBackgroundTintList(colorStateList1);
 
+
+            ColorStateList colorStateList6 = ColorStateList.valueOf(Color.parseColor("#808080"));
+            tarjetaInfoSuperiorLayout.setBackgroundTintList(colorStateList6);
             CalidadDelAireEstim.setText("BUSCANDO DISPOSITIVO...");
             MediaEnLaZonaText.setText("Estableciendo conexión con tu dispositivo CommunO3. Asegurate de que está encendido y cerca de tu smartphone. Esto puede tardar unos minutos.");
 
