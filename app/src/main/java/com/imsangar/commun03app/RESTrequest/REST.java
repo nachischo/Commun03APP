@@ -4,11 +4,15 @@ import android.util.Log;
 
 import com.imsangar.commun03app.MainActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class REST {
     //-------------------------------------------------------------
     //---------------------------REST------------------------------
     //-------------------------------------------------------------
+    //función para probar que es posible realizar peticiones de tipo POST
     public static void probarEnviarPOST() {
         PeticionarioREST elPeticionario = new PeticionarioREST();
 
@@ -31,6 +35,7 @@ public class REST {
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
+    //función para probar que es posible realizar peticiones de tipo GET
     public static void probarEnviarGET() {
         PeticionarioREST elPeticionario = new PeticionarioREST();
 
@@ -47,30 +52,61 @@ public class REST {
 
     } // ()
 
-    //doy de alta una nueva medicion en la base de datos con metodo POST
+    //dar de alta una nueva medicion en la base de datos con metodo POST
     //idMedicion: Texto, idSensor: Texto, valorMedicion: N --> altaNuevaMedicion() -->
     public static void altaNuevaMedicion(int idMedicion, String idSensor, double valorMedicion){
+        //si la ubicación actual del usuario ha sido encontrada...
         if(MainActivity.userFound){
             PeticionarioREST elPeticionario = new PeticionarioREST();
 
+            //realizar una petición de tipo POST que incluya en el cuerpo el id del sensor, el valor de la medición y la ubicación en la que se ha tomado
+            try {
+                elPeticionario.hacerPeticionREST("POST",  "https://communo3-backend.onrender.com/api/mediciones",
 
-            elPeticionario.hacerPeticionREST("POST",  "https://dmesmun.upv.edu.es/ServidorProyecto3a/serv/",
+                        String.valueOf(new JSONObject().put("value", valorMedicion).put("lat", MainActivity.userLocation.getLatitude()).put("lng", MainActivity.userLocation.getLongitude()).put("instante", System.currentTimeMillis())),
 
-                    "{ 'sensor': '"+idMedicion+"', 'valor': "+valorMedicion+", 'lat': "+ MainActivity.userLocation.getLatitude() +", 'lon': "+MainActivity.userLocation.getLongitude()+"}",
-                    new PeticionarioREST.RespuestaREST () {
-                        @Override
-                        public void callback(int codigo, String cuerpo) {
-                            Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
+                        new PeticionarioREST.RespuestaREST () {
+                            @Override
+                            public void callback(int codigo, String cuerpo) {
+                                Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
 
+                            }
                         }
-                    }
-            );
+                );
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     //clase genérica para realizar peticiones http get o post
-    //, 'tiempo': '"+System.currentTimeMillis()/1000+"'
+    //, 'instante': '"+System.currentTimeMillis()+"'
 
+    public static void postSensorActivo(boolean estado, String nickname){
+        //si la ubicación actual del usuario ha sido encontrada...
+        if(MainActivity.userFound){
+            PeticionarioREST elPeticionario = new PeticionarioREST();
+
+            //realizar una petición de tipo POST que incluya en el cuerpo el id del sensor, el valor de la medición y la ubicación en la que se ha tomado
+            try {
+                elPeticionario.hacerPeticionREST("POST",  "https://communo3-backend.onrender.com/api/usuarios/"+nickname+"/sensor/activo",
+
+                        String.valueOf(new JSONObject().put("activo", estado)),
+
+                        new PeticionarioREST.RespuestaREST () {
+                            @Override
+                            public void callback(int codigo, String cuerpo) {
+                                Log.d( "pruebasPeticionario", "TENGO RESPUESTA:\ncodigo = " + codigo + "\ncuerpo: \n" + cuerpo);
+
+                            }
+                        }
+                );
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    //clase para simplificación de peticiones
     public static class nuevaPeticion{
 
         //urlDestino:String --> nuevaPeticion.get() -->
@@ -96,7 +132,7 @@ public class REST {
             );
         }
 
-        //urlDestino:String, cuerpo:String --> nuevaPeticion.post() -->
+        //urlDestino:String, cuerpo:String --> nuevaPeticion.put() -->
         public static void put(String urlDestino, String cuerpo, PeticionarioREST.RespuestaREST callback){
 
             PeticionarioREST elPeticionario = new PeticionarioREST();

@@ -41,7 +41,8 @@ public class TabBTLE extends Fragment {
 
             SharedPreferences sharedPreferences = getContext().getSharedPreferences("shared_prefs",MODE_PRIVATE);
 
-            BTLE.buscarEsteDispositivoBTLE(sharedPreferences.getString("uuid","no hay uuid para buscar"));
+            BTLE BTLEObject = new BTLE(getContext());
+            BTLEObject.buscarEsteDispositivoBTLE(sharedPreferences.getString("uuid","no hay uuid para buscar"));
         });
         return root;
     }

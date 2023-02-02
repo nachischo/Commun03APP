@@ -1,5 +1,6 @@
 package com.imsangar.commun03app.beaconManagement;
 
+import static android.content.Context.MODE_PRIVATE;
 import static java.lang.Math.pow;
 
 import android.Manifest;
@@ -12,70 +13,36 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.imsangar.commun03app.MainActivity;
+import com.imsangar.commun03app.RESTrequest.PeticionarioREST;
 import com.imsangar.commun03app.RESTrequest.REST;
 import com.imsangar.commun03app.fragments.TabCalibration;
 import com.imsangar.commun03app.services.ServicioNotificaciones;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
-
-class counters {
-    static int BeaconCounter = 1;
-    static int AnteriorValorBruto = 0;
-    static double anteriorValorMedicion = - 1;
-    static double anteriorValorMedicionOffset = - 1;
-    public static double Voffset = - 1;
-    static double CalibracionDelSensor = 48.31;
-    static double Vcalibracion = 0.0;
-    static double anteriorValorBrutoO3 = 0.0;
-    static double anteriorValorTemperatura = 0.0;
-
-
-
-
-    static double calculaO3(int valorBrutoMedicion) {
-        double valorBruto = valorBrutoMedicion * 3.3 / 4096;
-        Vcalibracion = CalibracionDelSensor*499*pow(10,-6);
-        double res = valorBruto / Vcalibracion;
-        return Math.round(res*100.0)/100.0;
-    }
-
-    static double calcula03ConOffset(int valorBrutoMedicion) {
-        double valorBruto = valorBrutoMedicion * 3.3 / 4096 - Voffset;
-        double res = valorBruto / Vcalibracion;
-        return res;
-    }
-
-    static double calculaTemperatura(int valorBrutoTemperatura) {
-        double valorBruto = valorBrutoTemperatura * 3.3 / 4096;
-        double res = valorBruto * 29 - 18;
-        return Math.round(res);
-    }
-
-    static void anyadeUnoABeaconCounter() {
-        BeaconCounter++;
-    }
-
-    static void cambiaValorMedicion(double nuevoValorMedicion) {
-        anteriorValorMedicion = nuevoValorMedicion;
-    }
-
-    static void cambiaValorMedicionConOffset(double nuevoValorMedicionOffset) {
-        anteriorValorMedicionOffset = nuevoValorMedicionOffset;
-    }
-}
 
 public class BTLE {
     // --------------------------------------------------------------
     // -------------------------BTLE---------------------------------
     // --------------------------------------------------------------
+    public Context context;
+
+    public BTLE(Context contexto){
+        this.context=contexto;
+    }
+
     private static final String ETIQUETA_LOG = ">>>>";
 
     public static final int CODIGO_PETICION_PERMISOS = 11223344;
@@ -189,7 +156,7 @@ public class BTLE {
     //uuidSensor:Texto --> buscarEsteDispositivoBTLE() -->
     // --------------------------------------------------------------
     @SuppressLint("MissingPermission")
-    public static void buscarEsteDispositivoBTLE(final String dispositivoBuscado) {
+    public void buscarEsteDispositivoBTLE(final String dispositivoBuscado) {
 
         //-----------------------------------------------------------------------------------------
 
@@ -214,7 +181,18 @@ public class BTLE {
                 //solamente si el sensor tiene el uuid que estoy buscando sigo
                 if (Utilidades.bytesToHexString(tib.getUUID()).equals(dispositivoBuscado)) {
                     mostrarInformacionDispositivoBTLE(resultado);
-                    ServicioNotificaciones.ultimoDatoEnviado=System.currentTimeMillis()/1000;
+
+                    SharedPreferences userPrefs = context.getSharedPreferences("shared_prefs",MODE_PRIVATE);
+
+                    if(!userPrefs.getBoolean("SensorActivo",true)){
+                        REST.postSensorActivo(true, userPrefs.getString("nickname",""));
+                    }
+
+                    SharedPreferences.Editor editarPreferencias = userPrefs.edit();
+
+                    editarPreferencias.putBoolean("SensorActivo", true);
+                    editarPreferencias.commit();
+                    //ServicioNotificaciones.ultimoDatoEnviado=System.currentTimeMillis()/1000;
 
                     //solamente si el valor de la medicion ha cambiado hago POST al servidor para introducir una nueva medicion
                     if (Utilidades.bytesToInt(tib.getMajor()) == 1 && counters.calculaO3(Utilidades.bytesToInt(tib.getMinor()))!=counters.anteriorValorBrutoO3) {
@@ -236,7 +214,7 @@ public class BTLE {
                         counters.anteriorValorTemperatura = counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor()));
                         TabCalibration.cambiaValorTemperatura(counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
 
-                        REST.altaNuevaMedicion(Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
+                        //REST.altaNuevaMedicion(Utilidades.bytesToInt(tib.getMajor()), dispositivoBuscado, counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
                         counters.anyadeUnoABeaconCounter();
                         counters.cambiaValorMedicion(counters.calculaTemperatura(Utilidades.bytesToInt(tib.getMinor())));
                     }
